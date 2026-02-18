@@ -2,6 +2,15 @@
 
 // ─── API Response Types ────────────────────────────────────────────────────
 
+export interface ActivityType {
+  id: number;
+  name: string;
+  description: string;
+  asset?: {
+    filename: string;
+  };
+}
+
 export interface Activity {
     id: number;
     name: string;
@@ -10,13 +19,14 @@ export interface Activity {
     description: string;
     minAge: number;
     maxAge: number;
+    maxParticipants?: number;
     asset?: {
         filename: string;
-        trainer?: User;
-        users?: User[];
+    }
+    trainer?: User;
+    users?: User[];
     };
-
-}
+    
 
 export interface User {
     id: number;
@@ -47,3 +57,14 @@ export interface ActivityType {
 // ─── Auth Types ────────────────────────────────────────────────────────────
 
 // ─── Form Types ────────────────────────────────────────────────────────────
+
+export interface CreateActivityPayload {
+    name: string;
+    description: string;
+    weekday: string;
+    time: string;
+    minAge: number;
+    maxAge: number;
+    maxParticipants: number;
+    file?: File | null;
+}

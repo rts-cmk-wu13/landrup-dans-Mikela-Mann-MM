@@ -1,8 +1,8 @@
 import Image from "next/image";
-import { getActivityTypes, getAssetUrl } from "@/app/lib/api";
-import type { ActivityType } from "@/app/types";
+import { getAssetUrl } from "@/app/lib/api"
+import type { ActivityType } from "@/app/types"; 
 
-const FALLBACK_TYPES: ActivityType[] = [
+const ACTIVITY_TYPES: ActivityType[] = [
   {
     id: 1,
     name: "Børnehold",
@@ -25,23 +25,15 @@ const FALLBACK_TYPES: ActivityType[] = [
   },
 ];
 
-export default async function ActivityTypes() {
-  let types: ActivityType[] = FALLBACK_TYPES;  
-
-  try {
-    const fetched = await getActivityTypes();
-    if (fetched?.length) types = fetched;
-  } catch {
-   
-  }
-
+export default function ActivityTypes() {
+ 
   return (
     <section className="px-6 py-10 bg-white">
       <h2 className="font-display text-2xl font-bold text-brand-dark mb-6">
         Vores holdtyper
       </h2>
       <div className="space-y-8">
-        {types.map((type) => {
+        {ACTIVITY_TYPES.map((type) => {
           const imageUrl = getAssetUrl(type.asset?.filename);  
           return (
             <div key={type.id}>
