@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import type { Activity } from "@/app/types";
-import { getAssetUrl } from "@/app/lib/api";
+import type { Activity } from "@/types";
+import { getAssetUrl } from "@/lib/api";
 
 interface Probs {
     activity: Activity;

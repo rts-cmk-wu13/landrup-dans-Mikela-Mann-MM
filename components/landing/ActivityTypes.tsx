@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { getAssetUrl } from "@/app/lib/api"
-import type { ActivityType } from "@/app/types"; 
+import { getAssetUrl } from "@/lib/api"
+import type { ActivityType } from "@/types"; 
 
 const ACTIVITY_TYPES: ActivityType[] = [
   {
