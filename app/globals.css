@@ -1,29 +1,118 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+
 
 /* ─── Design ───────────────────────────────────────────────────────── */
 
 :root {
-  --font-body: 'Ubuntu', sans-serif;
-  --bottom-nav-height: 4.125rem; 
+  /* Brand */
+  --brand-dark: #003147;
+  --brand-mid: #0d5078;
+  --brand-active: #1a6a9a; 
+
+
+
+/* Greys */
+ --grey-light: #E9E9E9;
+ --grey-mid: #999999;
+ --grey-dark: #6F6F6F;
+ --grey-border: #E0E0E0;
+ --grey-card: #EAEAEA;
+ --warm-light: #EBECDF;
+
+ /* Absolute */
+ --black: #000000;
+ --white: #FFFFFF;
+
+ /* Activitycard overlay */
+ --card-overlay: rga(0,49,71,0.75);
+
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Reset ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--brand-dark);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
+/* ─── App shell ───────────────────────────────────────────────────────────── */
+#app-shell {
+  max-width: 26.875rem;
+  margin: 0 auto;
+  min-height: 100dvh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.page-content {
+  padding-bottom: calc(4.125rem + 1rem);
+}
+
+/* ─── Activity card ───────────────────────────────────────────────────────── */
+
+
+/* ─── Inputs ──────────────────────────────────────────────────────────────── */
+
+/* ─── Primary button ──────────────────────────────────────────────────────── */
+
+/* ─── Bottom navigation ───────────────────────────────────────────────────── */
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 26.875rem;
+  height: 4.125rem; /* 66px */
+  background-color: var(--brand-dark);
+  border-top: 0.0625rem solid rgba(255, 255, 255, 0.1);
+  z-index: 50;
+}
+
+/* ─── Search bar ──────────────────────────────────────────────────────────── */
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background-color: var(--brand-mid);
+  color: var(--white);
+  width: 100%;
+}
+
+.search-bar input {
+  background: transparent;
+  outline: none;
+  flex: 1;
+  font-size: 0.875rem;
+  font-family: var(--font-body);
+  color: var(--white);
+  border: none;
+}
+
+.search-bar input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ─── Hold / profile card ─────────────────────────────────────────────────── */
+
+/* Overej at fjerene noget styling fra globalt til direkte på componentet */
