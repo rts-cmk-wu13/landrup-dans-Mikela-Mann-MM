@@ -11,9 +11,13 @@ const ubuntu = Ubuntu({
 })
 
 export const metadata: Metadata = {
-  title: "Landrup Dans",
+  title: {
+     template: "%s | Landrup Dans", //%s placeholder will be replaced by the page title defined in each page
+    default: "Landrup Dans"
+  },
   description: "Tilmeld dig dine favorit dansehold hos Landrup Dans",
 };
+
 
 export default function RootLayout({
   children,
