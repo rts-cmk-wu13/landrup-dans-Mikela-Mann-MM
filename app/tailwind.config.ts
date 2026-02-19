@@ -28,7 +28,17 @@ const config: Config = {
                     warm: "#EBECDF",
                 },
             },
+            fontSize: {
+                "xs": ["0.8rem", { lineHeight: "1.4" }],
+                "sm": ["0.875rem", { lineHeight: "1.5" }],
+                "body": ["0.9rem", { lineHeight: "1.7" }],
+                "base": ["0.95rem", { lineHeight: "1.5" }],
+                "md": ["1rem", { lineHeight: "1.5" }],
+                "lg": ["1.375rem", { lineHeight: "1.3" }],
+                "xl": ["1.875rem", { lineHeight: "1.2" }],
+            },
             spacing: {
+                "1.2": "0.3rem",
                 "nav": "4.125rem", /* 66px */
             },
             maxWidth: {
