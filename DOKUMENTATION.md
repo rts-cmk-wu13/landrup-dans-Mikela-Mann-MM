@@ -40,16 +40,16 @@ landrup-dans/
 ├── app/
 │   ├── (public)/              # Route group — ingen bottom navigation
 │   │   ├── login/             # Log ind
-│   │   └── register/          # Opret bruger (Valgfri opgave B)
+│   │   └── opret-bruger/          # Opret bruger (Valgfri opgave B)
 │   │
 │   ├── (protected)/           # Route group — med bottom navigation
 │   │   ├── layout.tsx         # Injekterer BottomNav på alle beskyttede sider
-│   │   ├── activities/        # Aktivitetsoversigt med live søgning
+│   │   ├── aktiviteter/        # Aktivitetsoversigt med live søgning
 │   │   │   └── [id]/          # Aktivitetsdetaljer + tilmeld/forlad
-│   │   │       ├── participants/  # Deltagerliste (kun instruktører)
-│   │   │       └── edit/      # Rediger hold (Valgfri opgave A)
-│   │   ├── activities/create/ # Opret hold (Valgfri opgave A)
-│   │   └── profile/           # Min profil
+│   │   │       ├── deltagere/  # Deltagerliste (kun instruktører)
+│   │   │       └── rediger      # Rediger hold (Valgfri opgave A)
+│   │   ├── aktiviteter/opret/ # Opret hold (Valgfri opgave A)
+│   │   └── profil/           # Min profil
 │   │
 │   ├── layout.tsx             # Root layout med Ubuntu font
 │   ├── page.tsx               # Landing page
