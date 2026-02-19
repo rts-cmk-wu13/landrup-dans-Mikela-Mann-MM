@@ -7,6 +7,7 @@ import ActivityCard from "@/components/activities/ActivityCard";
 import SearchBar from "@/components/ui/SearchBar";
 import type { Activity } from "@/types";
 import { getActivities } from "@/lib/api"
+import { reportError } from "@/lib/reportError";
 
 export default function ActivitiesPage() {
     const [activities, setActivities] = useState<Activity[]>([]);
@@ -19,6 +20,18 @@ export default function ActivitiesPage() {
             .catch((err) => reportError(err, { page: "activities" }))
             .finally(() => setLoading(false));
     }, []);
+
+    const filtered = useMemo(() => {
+        if(!search.trim()) return activities;
+        const q = search.toLowerCase();
+        return activities.filter(
+            (a) => 
+                a.name.toLowerCase().includes(q) ||
+                a.weekday.toLowerCase().includes(q) ||
+                a.trainer?.firstname?.toLowerCase().includes(q) ||
+                a.trainer?.lastname?.toLowerCase().includes(q) 
+        );
+    }, [activities, search]); 
 
     return (
         <main className="page-content">
@@ -55,5 +68,4 @@ export default function ActivitiesPage() {
             </div>
         </main>
     );
-    )
 }
