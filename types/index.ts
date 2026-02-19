@@ -54,9 +54,23 @@ export interface ActivityType {
     };
 }
 
+export interface ActivityProbs {
+    activity: Activity;
+}
+
 // ─── Auth Types ────────────────────────────────────────────────────────────
 
 // ─── Form Types ────────────────────────────────────────────────────────────
+
+export interface ContactPayload {
+  name: string;
+  email: string;
+  message: string;
+}
+
+export interface NewsletterPayload {
+  email: string;
+}
 
 export interface CreateActivityPayload {
     name: string;
@@ -67,4 +81,23 @@ export interface CreateActivityPayload {
     maxAge: number;
     maxParticipants: number;
     file?: File | null;
+}
+
+export interface ContactFormErrors {
+  name?: string;
+  email?: string;
+  message?: string;
+  general?: string;
+}
+
+// ─── Component Props ───────────────────────────────────────────────────────
+
+export interface SearchBarProps {
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+}
+
+export interface TestimonialsCarouselProps {
+  testimonials: Testimonial[];
 }

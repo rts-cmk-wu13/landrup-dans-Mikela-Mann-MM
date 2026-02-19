@@ -2,14 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import type { Activity } from "@/types";
+import type { ActivityProbs} from "@/types";
 import { getAssetUrl } from "@/lib/api";
 
-interface Probs {
-    activity: Activity;
-}
 
-export default function ActivityCard({ activity }: Probs) {
+export default function ActivityCard({ activity }: ActivityProbs) {
     const imageUrl = getAssetUrl(activity.asset?.filename);
 
     return (

@@ -6,7 +6,7 @@ import Image from "next/image";
 export default function Hero() {
     return (
         <section className="relative min-h-[60vh] flex flex-col items-center justify-end pb-12 overflow-hidden">
-            {/* Background Image */}
+            {/* Baggrundsbillede */}
             <div className="absolute inset-0 -z-10">
                 <Image
                     src="/images/heroimg.jpg"

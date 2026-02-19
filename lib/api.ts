@@ -2,7 +2,10 @@
 import type {
     CreateActivityPayload,
     Activity,
+    ContactPayload,
     User,
+    NewsletterPayload,
+    Testimonial,
 
 } from "@/types";
 
@@ -113,6 +116,27 @@ export default function deleteActivity(id: number, token: string): Promise<void>
 // ─── Auth ──────────────────────────────────────────────────────────────────
 
 // ─── Content ───────────────────────────────────────────────────────────────
+
+export async function getTestimonials(): Promise<Testimonial[]> {
+  return apiFetch<Testimonial[]>("/api/v1/testimonials");
+}
+
+export async function submitNewsletter(
+  payload: NewsletterPayload
+): Promise<void> {
+  return apiFetch<void>("/api/v1/newsletter", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function submitContact(payload: ContactPayload): Promise<void> {
+  // Endpoint is /api/v1/messages — not /api/v1/contact
+  return apiFetch<void>("/api/v1/messages", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
 
 // ─── Asset URL helper ──────────────────────────────────────────────────────
 
