@@ -1,3 +1,5 @@
+"use server"
+
 import type { Session } from "@/types";
 
 const COOKIE_NAME =
