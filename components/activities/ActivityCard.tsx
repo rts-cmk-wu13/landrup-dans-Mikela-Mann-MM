@@ -3,11 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { ActivityProbs } from "@/types";
-import { getAssetUrl } from "@/lib/api";
-
 
 export default function ActivityCard({ activity }: ActivityProbs) {
-    const imageUrl = getAssetUrl(activity.asset?.filename);
+    const imageUrl = activity.asset?.url;
 
     return (
         <Link href={`/aktiviteter/${activity.id}`} className="activity-card">

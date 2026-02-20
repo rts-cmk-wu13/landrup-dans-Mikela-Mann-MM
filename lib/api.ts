@@ -7,8 +7,8 @@ import type {
     User,
     RegisterPayload,
     NewsletterPayload,
-   
     Testimonial,
+    
 
 } from "@/types";
 
@@ -27,7 +27,7 @@ async function apiFetch<T>(
         ...((rest.headers as Record<string, string>) ?? {}),
     };
 
-    if (!(rest.body instanceof FormData)) {
+    if (!(rest.body instanceof FormData) && !((rest.headers as Record<string, string>)?.["Content-Type"]?.includes("form"))) {
         headers["Content-Type"] = "application/json";
     }
 
@@ -108,7 +108,7 @@ export async function updateActivity(
 export async function deleteActivity(id: number, token: string): Promise<void> {
     return apiFetch<void>(`/api/v1/activities/${id}`, {
         method: "DELETE",
-        token, 
+        token,
     });
 }
 
@@ -116,82 +116,81 @@ export async function deleteActivity(id: number, token: string): Promise<void> {
 // ─── Users ─────────────────────────────────────────────────────────────────
 
 export async function getUser(userId: number, token: string): Promise<User> {
-  return apiFetch<User>(`/api/v1/users/${userId}`, { token });
+    return apiFetch<User>(`/api/v1/users/${userId}`, { token });
 }
 
 export async function enrollInActivity(
-  userId: number,
-  activityId: number,
-  token: string
+    userId: number,
+    activityId: number,
+    token: string
 ): Promise<void> {
-  return apiFetch<void>(`/api/v1/users/${userId}/activities/${activityId}`, {
-    method: "POST",
-    token,
-  });
+    return apiFetch<void>(`/api/v1/users/${userId}/activities/${activityId}`, {
+        method: "POST",
+        token,
+    });
 }
 
 export async function leaveActivity(
-  userId: number,
-  activityId: number,
-  token: string
+    userId: number,
+    activityId: number,
+    token: string
 ): Promise<void> {
-  return apiFetch<void>(`/api/v1/users/${userId}/activities/${activityId}`, {
-    method: "DELETE",
-    token,
-  });
+    return apiFetch<void>(`/api/v1/users/${userId}/activities/${activityId}`, {
+        method: "DELETE",
+        token,
+    });
 }
 
 export async function registerUser(payload: RegisterPayload): Promise<User> {
-  // API expects application/x-www-form-urlencoded — not JSON
-  const form = new URLSearchParams();
-  form.append("username",  payload.username);
-  form.append("password",  payload.password);
-  form.append("firstname", payload.firstname);
-  form.append("lastname",  payload.lastname);
-  form.append("age",       String(payload.age));
-  form.append("role",      "default");
+    const form = new URLSearchParams();
+    form.append("username",  payload.username);
+    form.append("password",  payload.password);
+    form.append("firstname", payload.firstname);
+    form.append("lastname",  payload.lastname);
+    form.append("age",       String(payload.age));
+    form.append("role",      "default");
 
-  return apiFetch<User>("/api/v1/users", {
-    method: "POST",
-    body: form.toString(),
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  });
+    return apiFetch<User>("/api/v1/users", {
+        method: "POST",
+        body: form.toString(),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    });
 }
 
 // ─── Auth ──────────────────────────────────────────────────────────────────
 
 export async function loginUser(
-  username: string,
-  password: string
+    username: string,
+    password: string
 ): Promise<AuthResponse> {
-  // Endpoint is /auth/token — no /api/v1/ prefix
-  return apiFetch<AuthResponse>("/auth/token", {
-    method: "POST",
-    body: JSON.stringify({ username, password }),
-  });
+    // Endpoint is /auth/token — no /api/v1/ prefix
+    return apiFetch<AuthResponse>("/auth/token", {
+        method: "POST",
+        body: JSON.stringify({ username, password }),
+    });
 }
 
 // ─── Content ───────────────────────────────────────────────────────────────
 
 export async function getTestimonials(): Promise<Testimonial[]> {
-  return apiFetch<Testimonial[]>("/api/v1/testimonials");
+    return apiFetch<Testimonial[]>("/api/v1/testimonials");
 }
 
 export async function submitNewsletter(
-  payload: NewsletterPayload
+    payload: NewsletterPayload
 ): Promise<void> {
-  return apiFetch<void>("/api/v1/newsletter", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+    return apiFetch<void>("/api/v1/newsletter", {
+        method: "POST",
+        body: JSON.stringify(payload),
+    });
 }
 
 export async function submitContact(payload: ContactPayload): Promise<void> {
-  // Endpoint is /api/v1/messages — not /api/v1/contact
-  return apiFetch<void>("/api/v1/messages", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+    // Endpoint is /api/v1/messages — not /api/v1/contact
+    return apiFetch<void>("/api/v1/messages", {
+        method: "POST",
+        body: JSON.stringify(payload),
+    });
 }
 
 // ─── Asset URL helper ──────────────────────────────────────────────────────

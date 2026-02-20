@@ -2,61 +2,68 @@
 
 // ─── API Response Types ────────────────────────────────────────────────────
 
+
+
+export interface Asset {
+  id: number;
+  url: string;
+  filename?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface ActivityType {
   id: number;
   name: string;
   description: string;
-  asset?: {
-    filename: string;
-  };
+  weekday?: string;
+  time?: string;
+  minAge?: number;
+  maxAge?: number;
+  maxParticipants?: number;
+  asset?: Asset;
+  assetId?: number;
 }
 
 export interface Activity {
-    id: number;
-    name: string;
-    weekday: string; // "Tirsdag"
-    time: string; // "13:45"
-    description: string;
-    minAge: number;
-    maxAge: number;
-    maxParticipants?: number;
-    asset?: {
-        filename: string;
-    }
-    trainer?: User;
-    users?: User[];
-    };
-    
-
-export interface User {
-    id: number;
-    firstname: string;
-    lastname: string;
-    username: string;
-    age: number;
-    role: "default" | "instructor" | "admin";
-    activities?: Activity[];
-}
-
-export interface Testimonial {
-    id: number;
-    quote: string;
-    author: string;
-    title: string;
-}
-
-export interface ActivityType {
-    id: number;
-    name: string;
-    description: string;
-    asset?: {
-        filename: string;
-    };
+  id: number;
+  name: string;
+  weekday: string;
+  time: string;
+  description: string;
+  minAge: number;
+  maxAge: number;
+  maxParticipants?: number;
+  asset?: Asset;  // ← bruger nu Asset i stedet for inline
+  assetId?: number;
+  trainer?: User;
+  users?: User[];
 }
 
 export interface ActivityProbs {
-    activity: Activity;
+  activity: Activity;
 }
+
+
+export interface User {
+  id: number;
+  firstname: string;
+  lastname: string;
+  username: string;
+  age: number;
+  role: "default" | "instructor" | "admin";
+  activities?: Activity[];
+}
+
+export interface Testimonial {
+  id: number;
+  quote: string;
+  author: string;
+  title: string;
+}
+
+
+
 
 // ─── Auth Types ────────────────────────────────────────────────────────────
 
@@ -107,14 +114,14 @@ export interface RegisterPayload {
 }
 
 export interface CreateActivityPayload {
-    name: string;
-    description: string;
-    weekday: string;
-    time: string;
-    minAge: number;
-    maxAge: number;
-    maxParticipants: number;
-    file?: File | null;
+  name: string;
+  description: string;
+  weekday: string;
+  time: string;
+  minAge: number;
+  maxAge: number;
+  maxParticipants: number;
+  file?: File | null;
 }
 
 export interface ContactFormErrors {

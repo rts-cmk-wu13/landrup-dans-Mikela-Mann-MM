@@ -19,7 +19,7 @@ export default async function ActivityDetailPage({ params }: ActivityDetailPageP
     ? (activity.users ?? []).some((u) => u.id === session.userId)
     : false;
 
-  const imageUrl = getAssetUrl(activity.asset?.filename);
+  const imageUrl = activity.asset?.url;
 
   return (
     <main className="page-content">

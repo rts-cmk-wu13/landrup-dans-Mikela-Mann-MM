@@ -44,7 +44,7 @@ export default function NewsletterForm() {
           Nyhedsbrev
         </h2>
         <p className="text-green-600 text-sm font-medium">
-          ✓ Du er nu tilmeldt vores nyhedsbrev!
+            Du er nu tilmeldt vores nyhedsbrev!
         </p>
       </section>
     );
