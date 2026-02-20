@@ -3,12 +3,12 @@
 import { redirect } from "next/navigation";
 import { User } from "lucide-react";
 import { getUser } from "@/lib/api";
-import { getServerSession } from "@/lib/session";
+import { getSession } from "@/lib/dal";
 import LogoutButton from "@/components/ui/LogoutButton";
 import Link from "next/link";
 
 export default async function ProfilePage() {
-  const session = await getServerSession();
+  const session = await getSession();
   if (!session) redirect("/login");
 
   const user = await getUser(session.userId, session.token);
@@ -29,7 +29,7 @@ export default async function ProfilePage() {
           {user.firstname} {user.lastname}
         </p>
         <p className="text-(--grey-mid) text-sm mt-1">
-          {isInstructor ? "Instruktør" : "Bruger"}
+          {isInstructor ? "Instruktør" : "Medlem"}
         </p>
       </div>
 

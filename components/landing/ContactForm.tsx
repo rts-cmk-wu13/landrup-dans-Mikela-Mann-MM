@@ -47,7 +47,7 @@ export default function ContactForm() {
   if (success) {
     return (
       <section className="px-6 py-10 bg-white">
-        <h2 className="font-display text-2xl font-bold text-brand-dark mb-2">Kontakt os</h2>
+        <h2 className="font-display text-2xl font-bold text-(--brand-dark) mb-2">Kontakt os</h2>
         <p className="text-green-600 font-medium text-sm">✓ Tak for din besked! Vi vender tilbage snart.</p>
       </section>
     );
@@ -55,7 +55,7 @@ export default function ContactForm() {
 
   return (
     <section className="px-6 py-10 bg-white">
-      <h2 className="font-display text-2xl font-bold text-brand-dark mb-6">Kontakt os</h2>
+      <h2 className="font-display text-2xl font-bold text-(--brand-dark) mb-6">Kontakt os</h2>
       <form onSubmit={handleSubmit} noValidate className="space-y-3">
         <div>
           <input className="form-input" placeholder="Navn" value={form.name} onChange={set("name")} />

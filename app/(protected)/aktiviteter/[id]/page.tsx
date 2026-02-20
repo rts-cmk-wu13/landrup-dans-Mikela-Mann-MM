@@ -1,16 +1,18 @@
-// app/(protected)/activities/[id]/page.tsx
+
+
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { getActivity, getAssetUrl } from "@/lib/api";
-import { getServerSession } from "@/lib/session";
+import { getSession } from "@/lib/dal";
 import EnrollButton from "@/components/activities/EnrollButton";
 import BackButton from "@/components/ui/BackButton"
 import { enrollAction, leaveAction } from "./actions";
 import { ActivityDetailPageProps } from "@/types";
 
 export default async function ActivityDetailPage({ params }: ActivityDetailPageProps) {
-  const session = await getServerSession();
-  const activity = await getActivity(Number(params.id)).catch(() => null);
+  const { id } = await params;
+  const session = await getSession();
+  const activity = await getActivity(Number(id)).catch(() => null);
   if (!activity) notFound();
 
   const isEnrolled = session

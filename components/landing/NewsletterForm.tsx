@@ -40,7 +40,7 @@ export default function NewsletterForm() {
   if (success) {
     return (
       <section className="px-6 py-10 bg-white">
-        <h2 className="font-display text-2xl font-bold text-brand-dark mb-2">
+        <h2 className="font-display text-2xl font-bold text-(--brand-dark) mb-2">
           Nyhedsbrev
         </h2>
         <p className="text-green-600 text-sm font-medium">
@@ -52,7 +52,7 @@ export default function NewsletterForm() {
 
   return (
     <section className="px-6 py-10 bg-white">
-      <h2 className="font-display text-2xl font-bold text-brand-dark mb-2">
+      <h2 className="font-display text-2xl font-bold text-(--brand-dark) mb-2">
         Nyhedsbrev
       </h2>
       <p className="text-gray-500 text-sm mb-5">

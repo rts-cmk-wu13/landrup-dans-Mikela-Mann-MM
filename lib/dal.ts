@@ -26,6 +26,13 @@ export async function getSession(): Promise<Session | null> {
     return null;
   }
 }
+/**  Deletes session-cookie - used for server-side logout  */
+export async function clearSession(): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.delete(COOKIE_NAME);
+}
+
+// ─── Guard helpers ─────────────────────────────────────────────────────────
 
 /** Require an authenticated session. Returns the session or null. */
 export async function requireAuth(): Promise<Session | null> {

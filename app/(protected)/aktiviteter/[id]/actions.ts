@@ -3,11 +3,11 @@
 "use server";
 
 import { enrollInActivity, leaveActivity } from "@/lib/api";
-import { getServerSession } from "@/lib/session";
+import { getSession } from "@/lib/dal";
 import { revalidatePath } from "next/cache";
 
 export async function enrollAction(activityId: number) {
-  const session = await getServerSession();
+  const session = await getSession();
   if (!session) return { error: "Ikke logget ind" };
   try {
     await enrollInActivity(session.userId, activityId, session.token);
@@ -22,7 +22,7 @@ export async function enrollAction(activityId: number) {
 }
 
 export async function leaveAction(activityId: number) {
-  const session = await getServerSession();
+  const session = await getSession();
   if (!session) return { error: "Ikke logget ind" };
   try {
     await leaveActivity(session.userId, activityId, session.token);

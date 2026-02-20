@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { User } from "lucide-react";
 import { getActivity, getActivityParticipants, getUser } from "@/lib/api";
-import { getServerSession } from "@/lib/dal";
+import { getSession } from "@/lib/dal";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -11,7 +11,7 @@ interface Props {
 
 export default async function ParticipantsPage({ params }: Props) {
   const { id } = await params;
-  const session = await getServerSession();
+  const session = await getSession();
 
   if (!session || (session.role !== "instructor" && session.role !== "admin")) {
     redirect("/activities");

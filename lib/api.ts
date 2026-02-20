@@ -23,7 +23,6 @@ async function apiFetch<T>(
 ): Promise<T> {
     const { token, ...rest } = init ?? {};
     const headers: HeadersInit = {
-        "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...((rest.headers as Record<string, string>) ?? {}),
     };
@@ -106,7 +105,7 @@ export async function updateActivity(
     });
 }
 
-export default function deleteActivity(id: number, token: string): Promise<void> {
+export async function deleteActivity(id: number, token: string): Promise<void> {
     return apiFetch<void>(`/api/v1/activities/${id}`, {
         method: "DELETE",
         token, 

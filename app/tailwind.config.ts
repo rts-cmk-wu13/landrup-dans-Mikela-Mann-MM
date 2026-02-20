@@ -11,6 +11,7 @@ const config: Config = {
     theme: {
         extend: {
             fontFamily: {
+                display: ["Ubuntu", "system-ui", "sans-serif"],
                 sans: ["Ubuntu", "system-ui", "sans-serif"],
             },
             colors: {

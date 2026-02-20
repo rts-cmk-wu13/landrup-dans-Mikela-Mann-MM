@@ -137,7 +137,7 @@ export interface TestimonialsCarouselProps {
 }
 
 export interface ActivityDetailPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export interface EnrollButtonProps {
