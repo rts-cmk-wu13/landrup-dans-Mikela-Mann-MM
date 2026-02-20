@@ -60,6 +60,25 @@ export interface ActivityProbs {
 
 // ─── Auth Types ────────────────────────────────────────────────────────────
 
+export interface LoginPayload {
+  username: string;
+  password: string;
+  rememberMe?: boolean;
+}
+
+export interface AuthResponse {
+  userId: number;
+  token: string;
+  role: "default" | "instructor" | "admin";
+}
+
+export interface Session {
+  userId: number;
+  token: string;
+  role: "default" | "instructor" | "admin";
+  rememberMe?: boolean;
+}
+
 // ─── Form Types ────────────────────────────────────────────────────────────
 
 export interface ContactPayload {
@@ -70,6 +89,15 @@ export interface ContactPayload {
 
 export interface NewsletterPayload {
   email: string;
+}
+
+export interface RegisterPayload {
+  firstname: string;
+  lastname: string;
+  username: string;
+  age: number;
+  password: string;
+  role: "default";
 }
 
 export interface CreateActivityPayload {

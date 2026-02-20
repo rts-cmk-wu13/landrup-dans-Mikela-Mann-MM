@@ -2,9 +2,12 @@
 import type {
     CreateActivityPayload,
     Activity,
+    AuthResponse,
     ContactPayload,
     User,
+    RegisterPayload,
     NewsletterPayload,
+   
     Testimonial,
 
 } from "@/types";
@@ -113,7 +116,61 @@ export default function deleteActivity(id: number, token: string): Promise<void>
 
 // ─── Users ─────────────────────────────────────────────────────────────────
 
+export async function getUser(userId: number, token: string): Promise<User> {
+  return apiFetch<User>(`/api/v1/users/${userId}`, { token });
+}
+
+export async function enrollInActivity(
+  userId: number,
+  activityId: number,
+  token: string
+): Promise<void> {
+  return apiFetch<void>(`/api/v1/users/${userId}/activities/${activityId}`, {
+    method: "POST",
+    token,
+  });
+}
+
+export async function leaveActivity(
+  userId: number,
+  activityId: number,
+  token: string
+): Promise<void> {
+  return apiFetch<void>(`/api/v1/users/${userId}/activities/${activityId}`, {
+    method: "DELETE",
+    token,
+  });
+}
+
+export async function registerUser(payload: RegisterPayload): Promise<User> {
+  // API expects application/x-www-form-urlencoded — not JSON
+  const form = new URLSearchParams();
+  form.append("username",  payload.username);
+  form.append("password",  payload.password);
+  form.append("firstname", payload.firstname);
+  form.append("lastname",  payload.lastname);
+  form.append("age",       String(payload.age));
+  form.append("role",      "default");
+
+  return apiFetch<User>("/api/v1/users", {
+    method: "POST",
+    body: form.toString(),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  });
+}
+
 // ─── Auth ──────────────────────────────────────────────────────────────────
+
+export async function loginUser(
+  username: string,
+  password: string
+): Promise<AuthResponse> {
+  // Endpoint is /auth/token — no /api/v1/ prefix
+  return apiFetch<AuthResponse>("/auth/token", {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+  });
+}
 
 // ─── Content ───────────────────────────────────────────────────────────────
 
