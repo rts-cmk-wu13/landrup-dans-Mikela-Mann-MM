@@ -12,7 +12,7 @@ export default function SearchBar({
 }: SearchBarProps) {
   return (
     <div className="search-bar">
-      <Search size={18} style={{ flexShrink: 0, opacity: 0.6 }} />
+      <Search size={18} className="shrink-0 opacity-60" />
       <input
         type="search"
         value={value}

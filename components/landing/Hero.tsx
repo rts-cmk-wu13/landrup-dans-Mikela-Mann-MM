@@ -30,7 +30,7 @@ export default function Hero() {
             </div>
 
             {/* CTA */}
-            <Link href="/login" className="btn-primary max-w-[200px] text-center">
+            <Link href="/login" className="btn-primary max-w-50 text-center"> {/* 200px */}
                 Log ind her
             </Link>
         </section>

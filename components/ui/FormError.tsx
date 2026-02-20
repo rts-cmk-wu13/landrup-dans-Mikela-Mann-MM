@@ -1,21 +1,11 @@
 
 
-interface Props {
-  message?: string;
-}
+import { ContactFormErrors } from "@/types";
 
-export default function FormError({ message }: Props) {
+export default function FormError({ message }: Pick<ContactFormErrors, "message">) {
   if (!message) return null;
   return (
-    <p
-      style={{
-        color: "#dc2626",
-        fontSize: "0.75rem",
-        marginTop: "0.25rem",
-        fontFamily: "var(--font-body)",
-      }}
-      role="alert"
-    >
+   <p className="text-(--error)  text-xs mt-1 font-(--font-body)" role="alert">
       {message}
     </p>
   );
