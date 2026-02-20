@@ -1,6 +1,5 @@
 
 import { getTestimonials } from "@/lib/api";
-import { reportError } from "@/lib/reportError"; 
 import Hero from "../components/landing/Hero";
 import ActivityTypes from "../components/landing/ActivityTypes";
 import NewsletterForm from "@/components/landing/NewsletterForm";

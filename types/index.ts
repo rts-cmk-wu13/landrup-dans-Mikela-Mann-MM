@@ -79,6 +79,12 @@ export interface Session {
   rememberMe?: boolean;
 }
 
+export interface AuthErrors {
+  username?: string;
+  password?: string;
+  general?: string;
+}
+
 // ─── Form Types ────────────────────────────────────────────────────────────
 
 export interface ContactPayload {
@@ -128,4 +134,15 @@ export interface SearchBarProps {
 
 export interface TestimonialsCarouselProps {
   testimonials: Testimonial[];
+}
+
+export interface ActivityDetailPageProps {
+  params: { id: string };
+}
+
+export interface EnrollButtonProps {
+  activityId: number;
+  initialEnrolled: boolean;
+  onEnroll: (activityId: number) => Promise<{ error?: string; success?: boolean }>;
+  onLeave: (activityId: number) => Promise<{ error?: string; success?: boolean }>;
 }

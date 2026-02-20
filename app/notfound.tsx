@@ -12,7 +12,7 @@ export default function NotFound() {
       <p className="text-brand-muted text-sm mb-8 text-center">
         Den side du leder efter eksisterer ikke.
       </p>
-      <Link href="/activities" className="btn-primary max-w-[200px] text-center">
+      <Link href="/activities" className="btn-primary max-w-50 text-center">
         Gå til aktiviteter
       </Link>
     </main>

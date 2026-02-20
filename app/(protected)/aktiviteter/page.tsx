@@ -45,7 +45,7 @@ export default function ActivitiesPage() {
                 {loading && (
                     <div className="flex flex-col gap-3">
                         {[1, 2, 3].map((i) => (
-                            <div key={i} className="h-[13.75rem] rounded-2xl bg-brand-mid opacity-40" />
+                            <div key={i} className="h-55 rounded-2xl bg-brand-mid opacity-40" />
                         ))}
                     </div>
                 )}

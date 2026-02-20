@@ -1,20 +1,14 @@
-
-
-"use client";
-
-/**
- * Client session utilities
- * Uses js-cookie for client-side cookie read/write.
- */
-
-import Cookies from "js-cookie";
 import type { Session } from "@/types";
 
 const COOKIE_NAME =
   process.env.NEXT_PUBLIC_SESSION_COOKIE_NAME ?? "landrup_session";
 
-export function getClientSession(): Session | null {
-  const raw = Cookies.get(COOKIE_NAME);
+// ─── Server-side (brug i Server Components og Server Actions) ──────────────
+
+export async function getServerSession(): Promise<Session | null> {
+  const { cookies } = await import("next/headers");
+  const cookieStore = await cookies();
+  const raw = cookieStore.get(COOKIE_NAME)?.value;
   if (!raw) return null;
   try {
     return JSON.parse(atob(raw)) as Session;
@@ -23,17 +17,9 @@ export function getClientSession(): Session | null {
   }
 }
 
-export function setClientSession(session: Session, remember: boolean): void {
-  const encoded = btoa(JSON.stringify(session));
-  if (remember) {
-    // 30 dage
-    Cookies.set(COOKIE_NAME, encoded, { expires: 30, sameSite: "strict" });
-  } else {
-    // Session cookie (expires when browser closes)
-    Cookies.set(COOKIE_NAME, encoded, { sameSite: "strict" });
-  }
+export async function clearServerSession(): Promise<void> {
+  const { cookies } = await import("next/headers");
+  const cookieStore = await cookies();
+  cookieStore.delete(COOKIE_NAME);
 }
 
-export function clearClientSession(): void {
-  Cookies.remove(COOKIE_NAME);
-}
