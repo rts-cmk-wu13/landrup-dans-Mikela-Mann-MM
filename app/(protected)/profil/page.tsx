@@ -1,8 +1,6 @@
-
-
 import { redirect } from "next/navigation";
 import { User } from "lucide-react";
-import { getUser } from "@/lib/api";
+import { getUser, getActivities } from "@/lib/api";
 import { getSession } from "@/lib/dal";
 import LogoutButton from "@/components/ui/LogoutButton";
 import InstructorActivityList from "@/components/activities/InstructorActivityList";
@@ -12,8 +10,16 @@ export default async function ProfilePage() {
   const session = await getSession();
   if (!session) redirect("/login");
 
-  const user = await getUser(session.userId, session.token);
   const isInstructor = session.role === "instructor" || session.role === "admin";
+
+  const [user, allActivities] = await Promise.all([
+    getUser(session.userId, session.token),
+    isInstructor ? getActivities() : Promise.resolve([]),
+  ]);
+
+  const instructorActivities = allActivities.filter(
+    (a) => a.instructorId === session.userId
+  );
 
   return (
     <main>
@@ -50,7 +56,7 @@ export default async function ProfilePage() {
         </div>
 
         {isInstructor ? (
-          <InstructorActivityList activities={user.activities ?? []} />
+          <InstructorActivityList activities={instructorActivities} />
         ) : (user.activities ?? []).length === 0 ? (
           <p className="text-(--grey-mid) text-sm">
             Du er ikke tilmeldt nogen aktiviteter endnu.

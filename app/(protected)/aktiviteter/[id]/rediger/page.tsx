@@ -3,120 +3,48 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { getActivity, updateActivity } from "@/lib/api";
-import { getClientSession } from "@/lib/session";
+import { useParams } from "next/navigation";
+import { useActionState } from "react";
+import { getActivity } from "@/lib/api";
 import { reportError } from "@/lib/reportError";
+import { updateActivityAction } from "./actions";
 import FormError from "@/components/ui/FormError";
-import type { CreateActivityPayload } from "@/types";
 
 const WEEKDAYS = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"];
 
-interface Errors {
-  name?: string;
-  description?: string;
-  weekday?: string;
-  time?: string;
-  minAge?: string;
-  maxAge?: string;
-  maxParticipants?: string;
-  general?: string;
-}
-
 export default function EditActivityPage() {
   const { id } = useParams<{ id: string }>();
-  const router = useRouter();
-
-  const [form, setForm] = useState({
-    name: "",
-    description: "",
-    weekday: "",
-    time: "",
-    minAge: "",
-    maxAge: "",
-    maxParticipants: "",
-    file: null as File | null,
-  });
-  const [errors, setErrors] = useState<Errors>({});
+  const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [defaults, setDefaults] = useState({
+    name: "", description: "", weekday: "", time: "",
+    minAge: "", maxAge: "", maxParticipants: "",
+  });
+
+  const [state, formAction, isPending] = useActionState(
+    async (_prev: { error?: string }, formData: FormData) => {
+      if (file) formData.set("file", file);
+      return updateActivityAction(Number(id), formData);
+    },
+    {}
+  );
 
   useEffect(() => {
-    const session = getClientSession();
-    if (!session || (session.role !== "instructor" && session.role !== "admin")) {
-      router.replace("/profil");
-      return;
-    }
-
     getActivity(Number(id))
-      .then((activity) => {
-        setForm({
-          name:            activity.name ?? "",
-          description:     activity.description ?? "",
-          weekday:         activity.weekday ?? "",
-          time:            activity.time ?? "",
-          minAge:          String(activity.minAge ?? ""),
-          maxAge:          String(activity.maxAge ?? ""),
-          maxParticipants: String(activity.maxParticipants ?? ""),
-          file:            null,
+      .then((a) => {
+        setDefaults({
+          name:            a.name ?? "",
+          description:     a.description ?? "",
+          weekday:         a.weekday ?? "",
+          time:            a.time ?? "",
+          minAge:          String(a.minAge ?? ""),
+          maxAge:          String(a.maxAge ?? ""),
+          maxParticipants: String(a.maxParticipants ?? ""),
         });
       })
-      .catch((err) => {
-        reportError(err, { page: "edit-activity", id });
-        setErrors({ general: "Kunne ikke hente aktiviteten. Prøv igen." });
-      })
+      .catch((err) => reportError(err, { page: "rediger", id }))
       .finally(() => setLoading(false));
-  }, [id, router]);
-
-  const validate = (): Errors => {
-    const e: Errors = {};
-    if (!form.name.trim())        e.name = "Holdnavn er påkrævet";
-    if (!form.description.trim()) e.description = "Beskrivelse er påkrævet";
-    if (!form.weekday)            e.weekday = "Vælg en ugedag";
-    if (!form.time.trim())        e.time = "Tidspunkt er påkrævet";
-    if (!form.minAge)             e.minAge = "Min. alder er påkrævet";
-    if (!form.maxAge)             e.maxAge = "Max. alder er påkrævet";
-    if (form.minAge && form.maxAge && Number(form.minAge) > Number(form.maxAge))
-      e.maxAge = "Max. skal være højere end min.";
-    if (!form.maxParticipants)    e.maxParticipants = "Max. deltagere er påkrævet";
-    return e;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const errs = validate();
-    if (Object.keys(errs).length) { setErrors(errs); return; }
-    setErrors({});
-    setSaving(true);
-
-    try {
-      const session = getClientSession();
-      if (!session) { router.replace("/login"); return; }
-
-      const payload: Partial<CreateActivityPayload> = {
-        name:            form.name,
-        description:     form.description,
-        weekday:         form.weekday,
-        time:            form.time,
-        minAge:          Number(form.minAge),
-        maxAge:          Number(form.maxAge),
-        maxParticipants: Number(form.maxParticipants),
-        file:            form.file ?? undefined,
-      };
-
-      await updateActivity(Number(id), payload, session.token);
-      router.push("/profil");
-    } catch (err) {
-      reportError(err, { page: "edit-activity", id });
-      setErrors({ general: "Noget gik galt. Prøv igen." });
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const set = (k: keyof typeof form) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-      setForm((f) => ({ ...f, [k]: e.target.value }));
+  }, [id]);
 
   if (loading) {
     return (
@@ -135,52 +63,45 @@ export default function EditActivityPage() {
         Rediger hold
       </h1>
 
-      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-3">
+      <form action={formAction} noValidate className="flex flex-col gap-3">
 
         <div>
-          <input className="form-input" placeholder="Holdnavn" value={form.name} onChange={set("name")} />
-          <FormError message={errors.name} />
+          <input className="form-input" name="name" placeholder="Holdnavn" defaultValue={defaults.name} />
         </div>
 
         <div>
           <textarea
             className="form-input resize-none"
             style={{ minHeight: "7.5rem" }}
+            name="description"
             placeholder="Beskrivelse"
-            value={form.description}
-            onChange={set("description")}
+            defaultValue={defaults.description}
           />
-          <FormError message={errors.description} />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <select className="form-input" value={form.weekday} onChange={set("weekday")}>
+            <select className="form-input" name="weekday" defaultValue={defaults.weekday}>
               <option value="">Ugedag</option>
               {WEEKDAYS.map((d) => <option key={d} value={d}>{d}</option>)}
             </select>
-            <FormError message={errors.weekday} />
           </div>
           <div>
-            <input className="form-input" type="time" value={form.time} onChange={set("time")} />
-            <FormError message={errors.time} />
+            <input className="form-input" type="time" name="time" defaultValue={defaults.time} />
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <input className="form-input" type="number" min={0} placeholder="Alder (min.)" value={form.minAge} onChange={set("minAge")} />
-            <FormError message={errors.minAge} />
+            <input className="form-input" type="number" min={0} name="minAge" placeholder="Alder (min.)" defaultValue={defaults.minAge} />
           </div>
           <div>
-            <input className="form-input" type="number" min={0} placeholder="Alder (max.)" value={form.maxAge} onChange={set("maxAge")} />
-            <FormError message={errors.maxAge} />
+            <input className="form-input" type="number" min={0} name="maxAge" placeholder="Alder (max.)" defaultValue={defaults.maxAge} />
           </div>
         </div>
 
         <div>
-          <input className="form-input" type="number" min={1} placeholder="Deltagere (max.)" value={form.maxParticipants} onChange={set("maxParticipants")} />
-          <FormError message={errors.maxParticipants} />
+          <input className="form-input" type="number" min={1} name="maxParticipants" placeholder="Deltagere (max.)" defaultValue={defaults.maxParticipants} />
         </div>
 
         <div>
@@ -194,31 +115,27 @@ export default function EditActivityPage() {
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={(e) => setForm((f) => ({ ...f, file: e.target.files?.[0] ?? null }))}
+                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
               />
             </label>
             <span className="text-(--grey-mid) text-sm">
-              {form.file ? form.file.name : "Ingen fil valgt"}
+              {file ? file.name : "Ingen fil valgt"}
             </span>
           </div>
         </div>
 
-        <FormError message={errors.general} />
+        <FormError message={state?.error} />
 
         <div className="grid grid-cols-2 gap-3 mt-2">
           <button
             type="button"
-            onClick={() => router.back()}
+            onClick={() => history.back()}
             className="py-4 rounded-xl font-medium text-(--grey-mid) border border-(--grey-mid) bg-transparent"
           >
             Annuller
           </button>
-          <button
-            type="submit"
-            disabled={saving}
-            className="btn-primary"
-          >
-            {saving ? "Gemmer…" : "Gem ændringer"}
+          <button type="submit" disabled={isPending} className="btn-primary">
+            {isPending ? "Gemmer…" : "Gem ændringer"}
           </button>
         </div>
 

@@ -2,12 +2,12 @@
 
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { getActivity, getAssetUrl } from "@/lib/api";
+import { getActivity } from "@/lib/api";
 import { getSession } from "@/lib/dal";
 import EnrollButton from "@/components/activities/EnrollButton";
-import BackButton from "@/components/ui/BackButton"
+import BackButton from "@/components/ui/BackButton";
 import { enrollAction, leaveAction } from "./actions";
-import { ActivityDetailPageProps } from "@/types";
+import type { ActivityDetailPageProps } from "@/types";
 
 export default async function ActivityDetailPage({ params }: ActivityDetailPageProps) {
   const { id } = await params;
@@ -36,7 +36,7 @@ export default async function ActivityDetailPage({ params }: ActivityDetailPageP
             priority
           />
         ) : (
-          <div className="h-full w-full bg-gradient-to-br from-brand-dark to-brand-mid" />
+          <div className="h-full w-full bg-gradient-to-br from-(--brand-dark) to-(--brand-mid)" />
         )}
 
         <BackButton />
@@ -55,28 +55,23 @@ export default async function ActivityDetailPage({ params }: ActivityDetailPageP
 
       {/* ── Text content ── */}
       <div className="bg-white px-5 pt-5 pb-8">
-        <h1 className="font-sans text-lg font-medium text-black mb-1">
+        <h1 className="text-xl font-medium text-black mb-1">
           {activity.name}
         </h1>
 
-        <p className="text-body text-grey-dark mb-4">
+        <p className="text-sm text-(--grey-dark) mb-4">
           {activity.minAge}+ år
         </p>
 
-        <p className="font-sans text-body text-grey-dark">
+        <p className="text-sm leading-relaxed text-(--grey-dark)">
           {activity.description}
         </p>
 
-        {activity.trainer && (
-          <p className="mt-4 text-sm text-grey-mid">
-            Instruktør: {activity.trainer.firstname} {activity.trainer.lastname}
-          </p>
-        )}
-
-        <p className="mt-[0.3rem] text-sm text-grey-mid">
+        <p className="mt-3 text-sm text-(--grey-mid)">
           {activity.weekday} kl. {activity.time}
         </p>
       </div>
+
     </main>
   );
 }

@@ -34,9 +34,9 @@ export interface Activity {
   minAge: number;
   maxAge: number;
   maxParticipants?: number;
-  asset?: Asset;  // ← bruger nu Asset i stedet for inline
+  asset?: Asset;  
   assetId?: number;
-  trainer?: User;
+  instructorId?: number;
   users?: User[];
 }
 

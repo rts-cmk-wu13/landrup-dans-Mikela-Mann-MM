@@ -14,7 +14,7 @@ export default async function ParticipantsPage({ params }: Props) {
   const session = await getSession();
 
   if (!session || (session.role !== "instructor" && session.role !== "admin")) {
-    redirect("/activities");
+    redirect("/aktiviteter");
   }
 
   const [activity, participants, user] = await Promise.all([
@@ -33,7 +33,7 @@ export default async function ParticipantsPage({ params }: Props) {
         </h1>
       </div>
 
-      {/* ── Profil header (lys baggrund) ── */}
+      {/* ── Profil header ── */}
       <div className="bg-(--grey-light) px-4 py-7 text-center">
         <div className="w-14 h-14 rounded-full bg-(--brand-dark) flex items-center justify-center mx-auto mb-3">
           <User size={28} color="var(--grey-mid)" />
@@ -46,7 +46,7 @@ export default async function ParticipantsPage({ params }: Props) {
         </p>
       </div>
 
-      {/* ── Deltagerliste (mørk baggrund) ── */}
+      {/* ── Deltagerliste  ── */}
       <div className="bg-(--brand-dark) px-4 py-6 min-h-screen">
         <h2 className="text-white text-lg font-medium mb-1">
           {activity.name}
