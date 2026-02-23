@@ -38,30 +38,51 @@ I dette projekt er alle typer samlet i `types/index.ts` — herunder `Activity`,
 landrup-dans/
 │
 ├── app/
-│   ├── (public)/              # Route group — ingen bottom navigation
-│   │   ├── login/             # Log ind
-│   │   └── opret-bruger/          # Opret bruger (Valgfri opgave B)
+│   ├── (public)/                    # Route group — ingen bottom navigation
+│   │   ├── login/                   # Log ind
+│   │   │   ├── page.tsx
+│   │   │   └── actions.ts           # Server Action: loginAction
+│   │   └── opret-bruger/            # Opret bruger (Valgfri opgave B)
+│   │       ├── page.tsx
+│   │       └── actions.ts           # Server Action: registerAction
 │   │
-│   ├── (protected)/           # Route group — med bottom navigation
-│   │   ├── layout.tsx         # Injekterer BottomNav på alle beskyttede sider
-│   │   ├── aktiviteter/        # Aktivitetsoversigt med live søgning
-│   │   │   └── [id]/          # Aktivitetsdetaljer + tilmeld/forlad
-│   │   │       ├── deltagere/  # Deltagerliste (kun instruktører)
-│   │   │       └── rediger      # Rediger hold (Valgfri opgave A)
-│   │   ├── aktiviteter/opret/ # Opret hold (Valgfri opgave A)
-│   │   └── profil/           # Min profil
+│   ├── (protected)/                 # Route group — med bottom navigation
+│   │   ├── layout.tsx               # Injekterer BottomNav på alle beskyttede sider
+│   │   ├── aktiviteter/
+│   │   │   ├── page.tsx             # Aktivitetsoversigt med live søgning
+│   │   │   ├── opret/
+│   │   │   │   ├── page.tsx         # Opret hold (Valgfri opgave A)
+│   │   │   │   └── actions.ts       # Server Action: createActivityAction
+│   │   │   └── [id]/
+│   │   │       ├── page.tsx         # Aktivitetsdetaljer + tilmeld/forlad
+│   │   │       ├── actions.ts       # Server Actions: enrollAction, leaveAction
+│   │   │       ├── deltagere/
+│   │   │       │   └── page.tsx     # Deltagerliste (kun instruktører)
+│   │   │       └── rediger/
+│   │   │           ├── page.tsx     # Rediger hold (Valgfri opgave A)
+│   │   │           └── actions.ts   # Server Action: updateActivityAction
+│   │   └── profil/
+│   │       ├── page.tsx             # Min profil
+│   │       └── actions.ts           # Server Action: deleteActivityAction
 │   │
-│   ├── layout.tsx             # Root layout med Ubuntu font
-│   ├── page.tsx               # Landing page
-│   └── globals.css            # Design tokens og CSS custom classes
+│   ├── layout.tsx                   # Root layout 
+│   ├── page.tsx                     # Landing page
+│   ├── not-found.tsx                # 404-side
+│   ├── global-error.tsx             # Global fejlside (Sentry)
+│   └── globals.css                  # Design tokens og CSS custom classes
 │
 ├── components/
-│   ├── ui/                    # Generiske komponenter
+│   ├── ui/                          # Generiske komponenter
 │   │   ├── BottomNav.tsx
 │   │   ├── SearchBar.tsx
-│   │   └── FormError.tsx
+│   │   ├── FormError.tsx
+│   │   ├── BackButton.tsx
+│   │   └── LogoutButton.tsx
 │   ├── activities/
-│   │   └── ActivityCard.tsx
+│   │   ├── ActivityCard.tsx
+│   │   └── EnrollButton.tsx         # Tilmeld/forlad knap (client component)
+│   ├── profile/
+│   │   └── InstructorActivityList.tsx  # Instruktørens holdliste med slet/rediger
 │   └── landing/
 │       ├── Hero.tsx
 │       ├── ActivityTypes.tsx
@@ -71,42 +92,95 @@ landrup-dans/
 │       └── Footer.tsx
 │
 ├── lib/
-│   ├── api.ts                 # Alle API-kald samlet ét sted
-│   ├── dal.ts                 # Server-side session (Data Access Layer)
-│   ├── session.ts             # Client-side cookie-håndtering
-│   └── reportError.ts         # Wrapper om Sentry fejlrapportering
+│   ├── api.ts                       # Alle API-kald samlet ét sted
+│   ├── dal.ts                       # Server-side session (Data Access Layer)
+│   ├── session.ts                   # Client-side cookie-håndtering
+│   ├── errors.ts                    # Custom error-klasser (ApiError, AuthError m.fl.)
+│   └── reportError.ts               # Centraliseret fejlrapportering via Sentry
 │
 ├── types/
-│   └── index.ts               # Alle TypeScript interfaces
+│   └── index.ts                     # Alle TypeScript interfaces
 │
-└── proxy.ts                   # Route guard / middleware
+└── proxy.ts                         # Route guard / middleware
 ```
 
-Strukturen er bygget op om en klar adskillelse af ansvar: `api.ts` taler med backend, `dal.ts` og `session.ts` håndterer auth, `types/index.ts` definerer datamodellerne, og komponenter har kun ansvar for UI.
+Strukturen er bygget op om en klar adskillelse af ansvar: `api.ts` taler med backend, `dal.ts` og `session.ts` håndterer auth, `errors.ts` klassificerer fejltyper, og komponenter har kun ansvar for UI.
+
+Hver side der muterer data har sin egen `actions.ts` fil med Server Actions. Det holder side-komponenterne rene — de modtager kun data og delegerer mutations til actions, som kører server-side og har adgang til session-cookien.
 
 Route groups med parenteser — `(public)` og `(protected)` — bruges til at styre hvilke sider der får bottom navigation uden at påvirke URL-strukturen.
-
 ---
 
 ## Kodeeksempel
 
-**Hvad er det?** 
-**Hvad er formålet?** 
-**Hvordan sker det?** 
+```typescript
+// app/(protected)/aktiviteter/[id]/actions.ts
+"use server";
+
+export async function enrollAction(activityId: number) {
+  const session = await getSession();
+  if (!session) return { error: "Ikke logget ind" };
+
+  const [targetActivity, user] = await Promise.all([
+    getActivity(activityId),
+    getUser(session.userId, session.token),
+  ]);
+
+  const userAge = user.age ?? 0;
+  if (userAge < targetActivity.minAge || userAge > targetActivity.maxAge) {
+    return { error: `Du skal være mellem ${targetActivity.minAge} og ${targetActivity.maxAge} år.` };
+  }
+
+  const alreadyOnDay = (user.activities ?? []).some(
+    (a) => a.weekday?.toLowerCase() === targetActivity.weekday?.toLowerCase()
+  );
+  if (alreadyOnDay) {
+    return { error: "Du er allerede tilmeldt et hold på denne ugedag." };
+  }
+
+  await enrollInActivity(session.userId, activityId, session.token);
+  revalidatePath(`/aktiviteter/${activityId}`);
+  return { success: true };
+}
+```
+
+**Hvad er det?**  
+En Next.js Server Action der håndterer tilmelding til en aktivitet.
+
+**Hvad er formålet?**  
+At validere om en bruger må tilmelde sig en aktivitet — baseret på alder og ugedag — og udføre selve tilmeldingen, uden at eksponere JWT-token eller forretningslogik til klienten.
+
+**Hvordan sker det?**  
+Funktionen er markeret med `"use server"` direktivet, hvilket betyder den udelukkende kører på serveren — aldrig i browseren. Det er afgørende fordi JWT-tokenet er gemt i en `httpOnly` cookie, som JavaScript i browseren ikke kan tilgå af sikkerhedsmæssige årsager.
+
+Sessionen hentes med `getSession()` fra `lib/dal.ts` (Data Access Layer), som læser cookien via Next.js' server-side `cookies()` API.
+
+De to API-kald — `getActivity` og `getUser` — udføres parallelt med `Promise.all`, frem for sekventielt. Det halverer ventetiden, da begge kald er uafhængige af hinanden.
+
+Valideringen sker manuelt i applikationslaget frem for at stole på API'ets fejlkoder, fordi API'et i praksis returnerede inkonsistente fejl. Aldersvalidering tjekker om brugerens alder er inden for aktivitetens `minAge`-`maxAge` interval. Ugedagsvalidering tjekker om brugeren allerede har et hold på samme ugedag ved at filtrere brugerens eksisterende aktiviteter.
+
+Til sidst kalder funktionen `revalidatePath`, som fortæller Next.js at invalidere den cachede version af aktivitetssiden — så siden automatisk re-renderes med det opdaterede tilmeldingsstatus næste gang den besøges.
+
+---
 
 ## Security & Best Practices
 
-**Cookie-baseret autentifikation:**  
-Sessions gemmes i cookies via `js-cookie`. "Husk mig"-funktionen (Valgfri opgave C) styrer om cookien er en session-cookie (slettes når browseren lukkes) eller persisteres i 30 dage.
+**httpOnly cookie-baseret autentifikation:**  
+Sessions gemmes i `httpOnly` cookies, som sættes server-side via en Next.js Server Action i `login/actions.ts`. `httpOnly` betyder at JavaScript i browseren ikke kan læse cookien — den er kun tilgængelig for serveren. Det beskytter mod XSS-angreb (Cross-Site Scripting), hvor ondsindet JavaScript ellers kunne stjæle brugerens token.
+
+"Husk mig"-funktionen (Valgfri opgave C) styrer om cookien persisteres i 30 dage eller slettes når browseren lukkes (session-cookie). Fordi cookien er `httpOnly`, kan client-side kode ikke læse den — alle API-kald der kræver et token skal derfor ske via Server Actions, som har adgang til cookien server-side.
 
 **Route protection:**  
-`proxy.ts` (Next.js middleware) beskytter alle routes under `(protected)` server-side. Brugere uden gyldigt session-cookie bliver redirectet til login-siden. Instruktør-specifikke sider som deltagerlisten validerer rollen yderligere client-side.
+`proxy.ts` fungerer som Next.js middleware og kører server-side på alle requests. Den beskytter alle routes under `(protected)` ved at parse session-cookien og redirecte brugere uden gyldigt token til login-siden. Instruktør-specifikke sider som `/aktiviteter/opret` og `/rediger` validerer desuden brugerens rolle og redirecter ikke-instruktører til profilsiden.
 
 **Rollebaseret UI:**  
-Instruktører og almindelige brugere ser forskelligt indhold på profil- og aktivitetssider — fx ser instruktører "Deltagerliste" og rediger/slet-knapper, mens brugere ser "Tilmeld" og "Forlad".
+Instruktører og almindelige brugere ser forskelligt indhold på profil- og aktivitetssider. Instruktører ser "Mine hold" med rediger/slet-knapper og adgang til deltagerlister, mens medlemmer ser "Tilmeld" og "Forlad" på aktiviteter. Rolletjekket sker server-side baseret på `session.role` fra cookien.
+
+**Centraliseret fejlhåndtering:**  
+`lib/errors.ts` definerer custom error-klasser (`ApiError`, `AuthError`, `NotFoundError`, `ServerError`, `NetworkError`) som `apiFetch` kaster ved forskellige fejlscenarier. `lib/reportError.ts` wrapprer Sentry og sikrer at alle fejl logges struktureret — med fejltype, HTTP-statuskode og API-path — i development til konsollen og i production til Sentry-dashboardet.
 
 **Environment variables:**  
-API URL opbevares i `.env.local` og er tilgængelig via `process.env.NEXT_PUBLIC_API_URL`. Filen er gitignored og committes aldrig til repository.
+API URL og cookie-navn opbevares i `.env.local` og er tilgængelige via `process.env`. Filen er gitignored og committes aldrig til repository. I production sættes variablerne som environment variables i Vercel.
 
 ---
 
@@ -127,6 +201,13 @@ Kodebasen er struktureret med klar adskillelse — API-kald, auth-logik og UI-ko
 
 *[Hvad lærte jeg? Hvad ville jeg gøre anderledes?]*
 
-Dette projekt har givet mig praktisk erfaring med Next.js App Router og forskellen på Client og Server Components. Særligt arbejdet med route groups, proxy og cookie-baseret auth var ny læring. Jeg blev også mere bevidst om vigtigheden af at læse API-dokumentation grundigt — flere fejl i projektet skyldtes at jeg antog at endpoints og content-types fulgte en standard, som det konkrete API afveg fra (fx `application/x-www-form-urlencoded` på user-oprettelse og `/auth/token` uden `/api/v1/`-præfikset).
+Dette projekt har givet mig praktisk erfaring med Next.js App Router og den fundamentale forskel på Client og Server Components — ikke bare teoretisk, men som en arkitekturel beslutning der påvirkede hele projektet.
 
-Hvis jeg skulle starte forfra, ville jeg bruge mere tid på at kortlægge API'ets endpoints og datastrukturer inden jeg begyndte at kode, da det ville have sparet mig for en del refaktorering undervejs.
+Det mest lærerige var arbejdet med `httpOnly` cookies og session-håndtering. Det lød enkelt at gemme en session i en cookie, men valget om at bruge `httpOnly` for sikkerhedens skyld betød at al kode der brugte JWT-tokenet måtte omskrives fra client components til Server Actions — fordi browseren ikke kan læse en `httpOnly` cookie. Det var en god lære om at sikkerhedsbeslutninger har arkitekturelle konsekvenser, og at det er vigtigere at forstå *hvorfor* man vælger en løsning end blot at implementere den.
+
+Jeg blev også mere bevidst om vigtigheden af at læse API-dokumentation grundigt inden man begynder at kode. Flere fejl skyldtes at jeg antog at endpoints og content-types fulgte REST-konventioner, som det konkrete API afveg fra — fx `application/x-www-form-urlencoded` på user-oprettelse, `/auth/token` uden `/api/v1/`-præfikset, og at list-endpointet for aktiviteter ikke returnerede instruktørdata som enkelt-endpointet gjorde. Det kostede en del refaktorering undervejs.
+
+**Hvad ville jeg gøre anderledes?**  
+Jeg ville starte med at kortlægge alle API-endpoints, deres content-types og response-strukturer — gerne med et enkelt API-kald i terminalen — inden jeg begyndte at bygge komponenter. Jeg ville også sætte proxy og auth-arkitekturen op fra start, da det er svære at refaktorere sent i forløbet.
+
+Jeg ville desuden overveje om et `httpOnly` cookie-setup er den rigtige løsning til et projekt af denne størrelse, eller om en enklere tilgang uden `httpOnly` ville have reduceret kompleksiteten uden at kompromittere sikkerheden væsentligt — da projektet kører på et lokalt API uden real-world brugere.

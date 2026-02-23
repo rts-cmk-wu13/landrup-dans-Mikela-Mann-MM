@@ -1,3 +1,5 @@
+
+
 import { redirect } from "next/navigation";
 import { User } from "lucide-react";
 import { getUser, getActivities } from "@/lib/api";
@@ -62,16 +64,21 @@ export default async function ProfilePage() {
             Du er ikke tilmeldt nogen aktiviteter endnu.
           </p>
         ) : (
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-3">
             {(user.activities ?? []).map((a) => (
-              <li key={a.id}>
-                <Link
-                  href={`/aktiviteter/${a.id}`}
-                  className="flex justify-between items-center py-3 border-b border-white/10"
-                >
-                  <span className="text-white text-sm">{a.name}</span>
-                  <span className="text-(--grey-mid) text-xs">{a.weekday}</span>
-                </Link>
+              <li key={a.id} className="bg-(--grey-light) rounded-xl p-4">
+                <p className="text-(--brand-dark) font-bold text-base">{a.name}</p>
+                <p className="text-(--brand-dark) text-sm mt-1">
+                  {a.weekday} kl. {a.time}
+                </p>
+                <div className="mt-3">
+                  <Link
+                    href={`/aktiviteter/${a.id}`}
+                    className="px-4 py-2 bg-(--brand-dark) text-white text-sm rounded-lg inline-block"
+                  >
+                    Vis hold
+                  </Link>
+                </div>
               </li>
             ))}
           </ul>

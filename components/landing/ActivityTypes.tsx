@@ -1,4 +1,7 @@
+
+
 import Image from "next/image";
+import Link from "next/link";
 import { getActivities } from "@/lib/api";
 import type { Activity } from "@/types";
 
@@ -7,13 +10,13 @@ export default async function ActivityTypes() {
 
   return (
     <section className="px-6 py-10 bg-white">
-      <h2 className="font-display text-2xl font-bold text-brand-dark mb-6">
+      <h2 className="text-2xl font-bold text-(--brand-dark) mb-6">
         Vores holdtyper
       </h2>
       <div className="space-y-8">
         {activities.map((activity) => (
-          <div key={activity.id}>
-            <h3 className="font-display text-xl font-bold text-brand-dark mb-3">
+          <Link key={activity.id} href={`/aktiviteter/${activity.id}`} className="block">
+            <h3 className="text-xl font-bold text-(--brand-dark) mb-3">
               {activity.name}
             </h3>
             {activity.asset?.url && (
@@ -27,10 +30,10 @@ export default async function ActivityTypes() {
                 />
               </div>
             )}
-            <p className="text-gray-600 text-sm leading-relaxed">
+            <p className="text-(--grey-dark) text-sm leading-relaxed">
               {activity.description}
             </p>
-          </div>
+          </Link>
         ))}
       </div>
     </section>

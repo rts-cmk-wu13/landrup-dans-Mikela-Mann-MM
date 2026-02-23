@@ -3,7 +3,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { reportError } from "@/lib/reportError";
+import * as Sentry from "@sentry/nextjs";
+import Error from "next/error";
 
 export default function GlobalError({
   error,
@@ -13,22 +14,19 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    reportError(error, { digest: error.digest });
+    Sentry.captureException(error);
   }, [error]);
 
   return (
     <html lang="da">
       <body className="bg-(--brand-dark) min-h-screen flex flex-col items-center justify-center px-6 text-white">
-        <h2 className="font-display text-2xl font-bold mb-4">
+        <h2 className="text-2xl font-bold mb-4">
           Noget gik galt
         </h2>
-        <p className="text-brand-muted text-sm mb-6 text-center">
+        <p className="text-(--grey-mid) text-sm mb-6 text-center">
           Vi beklager ulejligheden. Fejlen er blevet registreret.
         </p>
-        <button
-          onClick={reset}
-          className="btn-primary max-w-50"
-        >
+        <button onClick={reset} className="btn-primary max-w-50">
           Prøv igen
         </button>
       </body>

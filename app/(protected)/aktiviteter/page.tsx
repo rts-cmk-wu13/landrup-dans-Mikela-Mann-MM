@@ -15,9 +15,11 @@ export default function ActivitiesPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+     // Midlertidig test — slet igen
+  //reportError(new Error("Test fejl"), { page: "aktiviteter" });
     getActivities()
       .then(setActivities)
-      .catch((err) => reportError(err, { page: "activities" }))
+      .catch((err) => reportError(err, { page: "aktiviteter" }))
       .finally(() => setLoading(false));
   }, []);
 
@@ -27,52 +29,36 @@ export default function ActivitiesPage() {
     return activities.filter(
       (a) =>
         a.name.toLowerCase().includes(q) ||
-        a.weekday.toLowerCase().includes(q) ||
-        false // instruktørnavn ikke tilgængeligt i list-endpoint
+        a.weekday.toLowerCase().includes(q)
     );
   }, [activities, search]);
 
   return (
     <main className="page-content">
-      {/* Sticky search header */}
-      <div style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 40,
-        backgroundColor: "#003147",
-        padding: "1rem 1rem 0.75rem",
-      }}>
+
+      {/* Sticky søgeheader */}
+      <div className="sticky top-0 z-40 bg-(--brand-dark) px-4 pt-4 pb-3">
         <SearchBar value={search} onChange={setSearch} />
       </div>
 
-      <div style={{ padding: "0.75rem 1rem 0" }}>
-        <h1 style={{
-          fontFamily: "var(--font-body)",
-          fontSize: "1.875rem",    /* 30px */
-          fontWeight: 500,
-          color: "#FFFFFF",
-          marginBottom: "1rem",
-        }}>
+      <div className="px-4 pt-3">
+        <h1 className="text-3xl font-medium text-white mb-4">
           Aktiviteter
         </h1>
 
         {loading && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+          <div className="flex flex-col gap-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} style={{ height: "13.75rem", borderRadius: "1rem", backgroundColor: "#0d5078", opacity: 0.4 }} />
+              <div
+                key={i}
+                className="h-55 rounded-2xl bg-(--brand-mid) opacity-40 animate-pulse"
+              />
             ))}
           </div>
         )}
 
         {!loading && filtered.length === 0 && (
-          <p style={{
-            color: "#999999",
-            fontSize: "0.875rem",
-            textAlign: "center",
-            marginTop: "2.5rem",
-            fontFamily: "var(--font-body)",
-            lineHeight: 1.6,
-          }}>
+          <p className="text-(--grey-mid) text-sm text-center mt-10 leading-relaxed">
             Der blev ikke fundet nogle aktiviteter.
             <br />
             Prøv at søge efter noget andet.
@@ -80,7 +66,7 @@ export default function ActivitiesPage() {
         )}
 
         {!loading && filtered.length > 0 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+          <div className="flex flex-col gap-3">
             {filtered.map((activity) => (
               <ActivityCard key={activity.id} activity={activity} />
             ))}

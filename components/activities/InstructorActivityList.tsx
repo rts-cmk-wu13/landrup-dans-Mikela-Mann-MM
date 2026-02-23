@@ -4,8 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Pencil, Trash2 } from "lucide-react";
-import { deleteActivity } from "@/lib/api";
-import { getClientSession } from "@/lib/session";
+import { deleteActivityAction } from "@/app/(protected)/profil/actions"
 import { reportError } from "@/lib/reportError";
 import type { Activity } from "@/types";
 
@@ -17,6 +16,7 @@ export default function InstructorActivityList({ activities }: Props) {
   const router = useRouter();
   const [confirmId, setConfirmId] = useState<number | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [errorId, setErrorId] = useState<number | null>(null);
 
   const handleDelete = async (id: number) => {
     if (confirmId !== id) {
@@ -28,11 +28,15 @@ export default function InstructorActivityList({ activities }: Props) {
     setConfirmId(null);
 
     try {
-      const session = getClientSession();
-      if (!session) return;
-      await deleteActivity(id, session.token);
-      router.refresh();
+      const result = await deleteActivityAction(id);
+      if (result.error) {
+        setErrorId(id);
+        reportError(new Error(result.error), { page: "profil", activityId: id });
+      } else {
+        router.refresh();
+      }
     } catch (err) {
+      setErrorId(id);
       reportError(err, { page: "profil", activityId: id });
     } finally {
       setDeletingId(null);
@@ -57,7 +61,6 @@ export default function InstructorActivityList({ activities }: Props) {
             {a.weekday} {a.time}
           </p>
 
-          {/* Max. deltagere + Tilmeldte */}
           <div className="flex gap-6 mt-2">
             <p className="text-(--brand-dark) text-sm">
               Max. deltagere: <span className="font-medium">{a.maxParticipants ?? "—"}</span>
@@ -67,7 +70,6 @@ export default function InstructorActivityList({ activities }: Props) {
             </p>
           </div>
 
-          {/* Knapper */}
           <div className="flex items-center justify-between mt-3">
             <Link
               href={`/aktiviteter/${a.id}/deltagere`}
@@ -98,6 +100,11 @@ export default function InstructorActivityList({ activities }: Props) {
           {confirmId === a.id && (
             <p className="text-red-400 text-xs mt-2">
               Er du sikker? Klik på skraldespanden igen for at bekræfte.
+            </p>
+          )}
+          {errorId === a.id && (
+            <p className="text-red-400 text-xs mt-2">
+              Kunne ikke slette aktiviteten. Prøv igen.
             </p>
           )}
         </li>
