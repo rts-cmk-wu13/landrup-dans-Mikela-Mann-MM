@@ -5,6 +5,7 @@ import { User } from "lucide-react";
 import { getUser } from "@/lib/api";
 import { getSession } from "@/lib/dal";
 import LogoutButton from "@/components/ui/LogoutButton";
+import InstructorActivityList from "@/components/activities/InstructorActivityList";
 import Link from "next/link";
 
 export default async function ProfilePage() {
@@ -34,19 +35,32 @@ export default async function ProfilePage() {
       </div>
 
       <div className="bg-(--brand-dark) px-4 py-6 min-h-screen">
-        <h2 className="text-white font-bold mb-4">
-          {isInstructor ? "Mine hold" : "Mine aktiviteter"}
-        </h2>
-        {(user.activities ?? []).length === 0 ? (
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-white font-bold">
+            {isInstructor ? "Mine hold" : "Mine aktiviteter"}
+          </h2>
+          {isInstructor && (
+            <Link
+              href="/aktiviteter/opret"
+              className="w-10 h-10 bg-(--grey-light) rounded-xl flex items-center justify-center font-bold text-(--brand-dark) text-xl"
+            >
+              +
+            </Link>
+          )}
+        </div>
+
+        {isInstructor ? (
+          <InstructorActivityList activities={user.activities ?? []} />
+        ) : (user.activities ?? []).length === 0 ? (
           <p className="text-(--grey-mid) text-sm">
-            {isInstructor ? "Du underviser ikke på nogen hold endnu." : "Du er ikke tilmeldt nogen aktiviteter endnu."}
+            Du er ikke tilmeldt nogen aktiviteter endnu.
           </p>
         ) : (
           <ul className="flex flex-col gap-2">
             {(user.activities ?? []).map((a) => (
               <li key={a.id}>
                 <Link
-                  href={`/activities/${a.id}`}
+                  href={`/aktiviteter/${a.id}`}
                   className="flex justify-between items-center py-3 border-b border-white/10"
                 >
                   <span className="text-white text-sm">{a.name}</span>
