@@ -1,9 +1,8 @@
-
-
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { registerUser } from "@/lib/api";
 import { reportError } from "@/lib/reportError";
@@ -81,24 +80,33 @@ export default function RegisterPage() {
       setForm((f) => ({ ...f, [k]: e.target.value }));
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-10 bg-brand-dark">
-      {/* Logo */}
-      <div className="mb-8 text-center text-white">
-        <div className="w-16 h-16 rounded-full border-2 border-white flex items-center justify-center mb-3 mx-auto">
-          <span className="font-display font-black text-2xl">LD</span>
-        </div>
-        <h1 className="font-display font-bold text-3xl leading-none tracking-wide uppercase">
-          LANDRUP
-          <br />
-          DANS
-        </h1>
-        <div className="mt-2 border-b-2 border-white w-full" />
+    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-10 bg-(--brand-dark)">
+
+      {/* ── Logo ── */}
+      <div className="w-full mb-10">
+        <Image
+          src="/logo/LD-logo.png"
+          alt="LD logo"
+          width={64}
+          height={64}
+          className="mx-auto mb-4"
+        />
+        <Image
+          src="/logo/logo.png"
+          alt="Landrup Dans"
+          width={290}
+          height={62}
+          className="ml-auto"
+        />
+        <div className="border-b-2 border-white mt-2.5" />
       </div>
 
-      <div className="w-full">
+      {/* ── Form content – 354px wide ── */}
+      <div className="w-full max-w-88.5">
         <h2 className="font-display text-2xl font-medium text-white mb-6">
           Opret bruger
         </h2>
+
         <form onSubmit={handleSubmit} noValidate className="space-y-3">
           <div>
             <input className="form-input" placeholder="Fornavn" value={form.firstname} onChange={set("firstname")} autoComplete="given-name" />
@@ -128,11 +136,11 @@ export default function RegisterPage() {
           <FormError message={errors.general} />
 
           <button type="submit" disabled={loading} className="btn-primary mt-2">
-            {loading ? "Opretter…" : "Log ind"}
+            {loading ? "Opretter…" : "Opret bruger"}
           </button>
         </form>
 
-        <p className="text-center text-white/60 text-sm mt-6">
+        <p className="text-center text-(--grey-mid) text-sm mt-6">
           Har du allerede en konto?{" "}
           <Link href="/login" className="text-white underline">
             Log ind

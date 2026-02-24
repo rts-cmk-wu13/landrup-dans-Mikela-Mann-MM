@@ -6,8 +6,6 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { TestimonialsCarouselProps } from "@/types";
 
-
-
 export default function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps) {
   const [index, setIndex] = useState(0);
 
@@ -19,39 +17,52 @@ export default function TestimonialsCarousel({ testimonials }: TestimonialsCarou
   const t = testimonials[index];
 
   return (
-    <section className="px-6 py-10 bg-(--brand-card)">
-      <h2 className="font-display text-2xl font-bold text-(--brand-dark) mb-6 text-center">
-        Det siger vores kunder om os
-      </h2>
-      <div className="bg-white rounded-2xl p-6 shadow-sm">
-        <p className="text-gray-700 text-sm leading-relaxed italic mb-4">
-          &ldquo;{t.quote}&rdquo;
+    <section
+      className="relative px-8 py-16 text-center text-white overflow-hidden"
+      style={{
+        backgroundImage: "url('/images/detsigerkunderne.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* Mørkt overlay */}
+      <div className="absolute inset-0 bg-black/60" />
+
+      <div className="relative z-10 max-w-sm mx-auto flex flex-col items-center gap-8">
+        <h2 className="font-display text-2xl font-bold leading-tight">
+          Det siger vores<br />kunder om os
+        </h2>
+
+        <p className="text-base leading-relaxed">
+          {t.content}
         </p>
-        <p className="font-display font-semibold text-(--brand-dark)">
-          {t.author}
-        </p>
-        {t.title && (
-          <p className="text-xs text-gray-500">{t.title}</p>
+
+        <div>
+          <p className="font-display font-bold text-lg">{t.name}</p>
+          {t.occupation && (
+            <p className="text-sm text-white/70 mt-0.5">{t.occupation}</p>
+          )}
+        </div>
+
+        {testimonials.length > 1 && (
+          <div className="flex gap-4">
+            <button
+              onClick={prev}
+              aria-label="Forrige"
+              className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center hover:bg-white/10 transition"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button
+              onClick={next}
+              aria-label="Næste"
+              className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center hover:bg-white/10 transition"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
         )}
       </div>
-      {testimonials.length > 1 && (
-        <div className="flex justify-center gap-4 mt-4">
-          <button
-            onClick={prev}
-            aria-label="Forrige"
-            className="p-2 rounded-full bg-(--brand-mid) text-white hover:bg-(--brand-hover) transition"
-          >
-            <ChevronLeft size={18} />
-          </button>
-          <button
-            onClick={next}
-            aria-label="Næste"
-            className="p-2 rounded-full bg-(--brand-mid) text-white hover:bg-(--brand-hover) transition"
-          >
-            <ChevronRight size={18} />
-          </button>
-        </div>
-      )}
     </section>
   );
 }

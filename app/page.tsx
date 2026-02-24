@@ -9,6 +9,8 @@ import Footer from "../components/landing/Footer";
 
 export default async function LandingPage() {
   const testimonials = await getTestimonials();
+
+  console.log("Testimonials:", testimonials);
   
   return (
       <main className="landing-page">

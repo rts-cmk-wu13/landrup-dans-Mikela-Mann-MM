@@ -57,9 +57,10 @@ export interface User {
 
 export interface Testimonial {
   id: number;
-  quote: string;
-  author: string;
-  title: string;
+  content: string;
+  name: string;
+  occupation: string;
+  createdAt: string;
 }
 
 

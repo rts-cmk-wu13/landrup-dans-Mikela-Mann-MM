@@ -54,20 +54,20 @@ export default async function ActivityDetailPage({ params }: ActivityDetailPageP
       </div>
 
       {/* ── Text content ── */}
-      <div className="bg-white px-5 pt-5 pb-8">
-        <h1 className="text-xl font-medium text-black mb-1">
+      <div className=" px-5 pt-5 pb-8">
+        <h1 className="text-xl font-medium text-white mb-1">
           {activity.name}
         </h1>
 
-        <p className="text-sm text-(--grey-dark) mb-4">
+        <p className="text-sm text-white mb-4">
           {activity.minAge}+ år
         </p>
 
-        <p className="text-sm leading-relaxed text-(--grey-dark)">
+        <p className="text-sm leading-relaxed text-white">
           {activity.description}
         </p>
 
-        <p className="mt-3 text-sm text-(--grey-mid)">
+        <p className="mt-3 text-sm text-white">
           {activity.weekday} kl. {activity.time}
         </p>
       </div>

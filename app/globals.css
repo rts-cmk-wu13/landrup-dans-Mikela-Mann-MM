@@ -51,7 +51,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ─── App shell ───────────────────────────────────────────────────────────── */
 #app-shell {
-  max-width: 26.875rem;
+  max-width: 25.6875rem; /* 411px */
   margin: 0 auto;
   min-height: 100dvh;
   position: relative;
@@ -161,7 +161,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   max-width: 26.875rem;
   height: 4.125rem; /* 66px */
-  background-color: var(--brand-dark);
+  background-color: var(--grey-light);
   border-top: 0.0625rem solid rgba(255, 255, 255, 0.1);
   z-index: 50;
 }

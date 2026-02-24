@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { loginAction, type LoginState } from "./actions";
 import FormError from "@/components/ui/FormError";
@@ -21,17 +22,25 @@ export default function LoginPage() {
 
       {/* ── Logo ── */}
       <div className="w-full mb-10">
-        <div className="w-18 h-18 rounded-full border-2 border-white flex items-center justify-center mx-auto mb-4">
-          <span className="font-bold text-[1.4rem] text-white --font-body">LD</span>
-        </div>
-        <p className="font-bold text-[2.25rem] leading-[1.05] text-white tracking-[0.04em] uppercase text-right --font-body">
-          LANDRUP<br />DANS
-        </p>
+        <Image
+          src="/logo/LD-logo.png"
+          alt="LD logo"
+          width={64}
+          height={64}
+          className="mx-auto mb-4"
+        />
+        <Image
+          src="/logo/logo.png"
+          alt="Landrup Dans"
+          width={290}
+          height={62}
+          className="ml-auto"
+        />
         <div className="border-b-2 border-white mt-2.5" />
       </div>
 
-      {/* ── Form ── */}
-      <div className="w-full">
+      {/* ── Form content – 354px wide ── */}
+      <div className="w-full max-w-88.5">
         <h2 className="text-[1.75rem] font-normal text-white mb-5 --font-body">
           Log ind
         </h2>
@@ -82,4 +91,3 @@ export default function LoginPage() {
     </main>
   );
 }
-
