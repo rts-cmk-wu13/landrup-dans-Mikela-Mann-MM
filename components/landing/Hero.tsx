@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 
 export default function Hero() {
     return (
-        <section className="relative min-h-[60vh] flex flex-col items-center justify-end pb-12 overflow-hidden">
+        <section className="relative min-h-205.75 flex flex-col items-center justify-end pb-12 overflow-hidden">
             {/* Baggrundsbillede */}
             <div className="absolute inset-0 -z-10">
                 <Image
@@ -20,19 +21,40 @@ export default function Hero() {
             </div>
 
             {/* Logo */}
-            <div className="absolute top-6 left-1/2 -translate-x-1/2 text-center text-white">
-                <div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center mb-1 mx-auto">
-                    <span className="font-display font-black text-lg">LD</span>
+            <div className="absolute top-6 w-full px-6">
+                {/* Ikon centreret */}
+                <div className="flex justify-center mb-4 pb-8 pt-8">
+                    <Image
+                        src="/logo/LD-logo.png"
+                        alt="LD logo"
+                        width={64}
+                        height={64}
+                    />
                 </div>
-                <p className="font-display font-bold text-sm tracking-widest uppercase">
-                    Landrup Dans
-                </p>
+                {/* Tekst-logo til højre */}
+                <div className="w-full text-right">
+                    <Image
+                        src="/logo/logo.png"
+                        alt="Landrup Dans"
+                        width={290}
+                        height={62}
+                        className="inline-block"
+                    />
+                </div>
+                <div className="border-b-2 border-white mt-2.5 -mx-6" />
             </div>
 
-            {/* CTA */}
-            <Link href="/login" className="btn-primary max-w-50 text-center"> {/* 200px */}
-                Log ind her
-            </Link>
+            {/* CTA + pile */}
+            <div className="flex flex-col items-center gap-4">
+                <Link href="/login" className="btn-primary text-center" style={{ width: "15rem" }}>
+                    Log ind her
+                </Link>
+
+                <div className="flex flex-col items-center -space-y-4">
+                    <ChevronDown size={42} strokeWidth={1.5} style={{ color: "var(--brand-primary)" }} />
+                    <ChevronDown size={42} strokeWidth={1.5} style={{ color: "var(--brand-primary)" }} />
+                </div>
+            </div>
         </section>
     );
 }

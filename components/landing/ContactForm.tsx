@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { submitContact } from "@/lib/api"; 
+import { submitContact } from "@/lib/api";
 import { reportError } from "@/lib/reportError";
 import FormError from "@/components/ui/FormError";
 import { ContactFormErrors } from "@/types";
@@ -53,8 +53,8 @@ export default function ContactForm() {
 
   return (
     <section className="content-wrapper--narrow py-10">
-      <h2 className="text-white text-2xl mb-6">Kontakt os</h2>
-      <form onSubmit={handleSubmit} noValidate className="space-y-[0.375rem]">
+      <h2 className="text-white text-2xl mb-6 pb-6">Kontakt os</h2>
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-2">
         <div>
           <input className="form-input" placeholder="Navn" value={form.name} onChange={set("name")} />
           <FormError message={errors.name} />
@@ -74,14 +74,16 @@ export default function ContactForm() {
           <FormError message={errors.message} />
         </div>
         <FormError message={errors.general} />
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn-primary mt-2"
-          style={{ width: "15rem", height: "3.3125rem" }}
-        >
-          {loading ? "Sender…" : "Send besked"}
-        </button>
+        <div className="flex justify-center mt-2">
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn-primary"
+            style={{ width: "15rem", height: "3.3125rem" }}
+          >
+            {loading ? "Sender…" : "Send besked"}
+          </button>
+        </div>
       </form>
     </section>
   );

@@ -42,7 +42,7 @@ export default function ActivitiesPage() {
       </div>
 
       <div className="px-4 pt-3">
-        <h1 className="text-3xl font-medium text-white mb-4">
+        <h1 className="text-3xl font-medium text-white mb-4 pb-5">
           Aktiviteter
         </h1>
 

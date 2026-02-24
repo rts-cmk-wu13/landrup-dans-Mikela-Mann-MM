@@ -39,7 +39,7 @@ export default function NewsletterForm() {
     return (
       <section className="content-wrapper py-10">
         <h2 className="text-2xl font-bold text-white mb-2">Nyhedsbrev</h2>
-        <p className="text-sm text-white/70 mt-2">
+        <p className="text-sm text-green-400 mt-2">
           ✓ Du er nu tilmeldt vores nyhedsbrev!
         </p>
       </section>
@@ -48,8 +48,8 @@ export default function NewsletterForm() {
 
   return (
     <section className="content-wrapper py-10">
-      <h2 className="text-2xl font-bold text-white mb-2">Nyhedsbrev</h2>
-      <p className="text-white/60 text-sm mb-5 leading-relaxed">
+      <h2 className="text-2xl font-bold text-white mb-2 pb-2">Nyhedsbrev</h2>
+      <p className="text-white/60 text-sm mb-5 leading-relaxed pb-3">
         Få direkte besked når vi har sæsonstart eller afholder arrangementer.
       </p>
       <form onSubmit={handleSubmit} noValidate>
@@ -65,7 +65,7 @@ export default function NewsletterForm() {
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary w-auto px-5 shrink-0"
+            className="btn-primary !w-auto px-5 shrink-0"
           >
             {loading ? "…" : "Tilmeld"}
           </button>

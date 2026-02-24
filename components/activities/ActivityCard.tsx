@@ -20,11 +20,13 @@ export default function ActivityCard({ activity }: ActivityProbs) {
             ) : (
                 <div className="w-full h-full bg-linear-to-br from-(--brand-dark) to-(--brand-mid)" />
             )}
-            <div className="activity-card-label">
-                <h3 className="font-medium text-[1.0625rem] text-(--white) leading-[1.3]">
+
+            {/* Bottom panel overlay */}
+            <div className="absolute bottom-0 left-0 right-0 mx-2 mb-2 px-4 py-4 rounded-2xl bg-(--brand-dark)/80 backdrop-blur-sm">
+                <h3 className="font-semibold text-[1.0625rem] text-white leading-[1.3]">
                     {activity.name}
                 </h3>
-                <p className="text-sm text-(--grey-mid) mt-0.75]">
+                <p className="text-sm text-white/60 mt-1">
                     {activity.weekday} kl. {activity.time}
                 </p>
             </div>

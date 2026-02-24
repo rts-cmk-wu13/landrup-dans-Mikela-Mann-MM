@@ -14,11 +14,11 @@ export default async function ActivityTypes() {
 
   return (
     <section className="content-wrapper pt-3.5rem py-10">
-      <h2 className="text-2xl font-bold text-white mb-8">Vores holdtyper</h2>
+      <h2 className="text-2xl font-bold text-white mb-8 pb-5">Vores holdtyper</h2>
       <div className="space-y-2.5625rem">
         {sorted.map((activity) => (
           <Link key={activity.id} href={`/aktiviteter/${activity.id}`} className="block group">
-            <h3 className="text-lg font-semibold text-white mb-2">
+            <h3 className="text-lg font-semibold text-white mb-2 pb-2">
               {activity.name}
             </h3>
             {activity.asset?.url && (
@@ -32,7 +32,7 @@ export default async function ActivityTypes() {
                 />
               </div>
             )}
-            <p className="text-white/65 text-sm leading-relaxed">
+            <p className="text-white/65 text-sm leading-relaxed pt-3 pb-4">
               {activity.description}
             </p>
           </Link>

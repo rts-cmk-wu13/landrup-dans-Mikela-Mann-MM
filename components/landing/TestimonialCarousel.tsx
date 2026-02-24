@@ -17,16 +17,16 @@ export default function TestimonialsCarousel({ testimonials }: TestimonialsCarou
   const t = testimonials[index];
 
   return (
-    <section
-      className="relative px-8 py-16 text-center text-white overflow-hidden"
-      style={{
-        backgroundImage: "url('/images/detsigerkunderne.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      {/* Mørkt overlay */}
-      <div className="absolute inset-0 bg-black/60" />
+    <section className="relative px-8 py-16 text-center text-white overflow-hidden">
+      {/* Baggrundsbillede med opacity */}
+      <div
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: "url('/images/detsigerkunderne.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
 
       <div className="relative z-10 max-w-sm mx-auto flex flex-col items-center gap-8">
         <h2 className="font-display text-2xl font-bold leading-tight">
