@@ -1,11 +1,9 @@
-
-
 "use client";
 
 import { useState } from "react";
 import { submitNewsletter } from "@/lib/api";
 import { reportError } from "@/lib/reportError";
-import FormError from "@/components/ui/FormError";  
+import FormError from "@/components/ui/FormError";
 
 export default function NewsletterForm() {
   const [email, setEmail] = useState("");
@@ -39,23 +37,19 @@ export default function NewsletterForm() {
 
   if (success) {
     return (
-      <section className="px-6 py-10 bg-white">
-        <h2 className="font-display text-2xl font-bold text-(--brand-dark) mb-2">
-          Nyhedsbrev
-        </h2>
-        <p className="text-green-600 text-sm font-medium">
-            Du er nu tilmeldt vores nyhedsbrev!
+      <section className="content-wrapper py-10">
+        <h2 className="text-2xl font-bold text-white mb-2">Nyhedsbrev</h2>
+        <p className="text-sm text-white/70 mt-2">
+          ✓ Du er nu tilmeldt vores nyhedsbrev!
         </p>
       </section>
     );
   }
 
   return (
-    <section className="px-6 py-10 bg-white">
-      <h2 className="font-display text-2xl font-bold text-(--brand-dark) mb-2">
-        Nyhedsbrev
-      </h2>
-      <p className="text-gray-500 text-sm mb-5">
+    <section className="content-wrapper py-10">
+      <h2 className="text-2xl font-bold text-white mb-2">Nyhedsbrev</h2>
+      <p className="text-white/60 text-sm mb-5 leading-relaxed">
         Få direkte besked når vi har sæsonstart eller afholder arrangementer.
       </p>
       <form onSubmit={handleSubmit} noValidate>
@@ -71,7 +65,7 @@ export default function NewsletterForm() {
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary w-auto px-5"
+            className="btn-primary w-auto px-5 shrink-0"
           >
             {loading ? "…" : "Tilmeld"}
           </button>

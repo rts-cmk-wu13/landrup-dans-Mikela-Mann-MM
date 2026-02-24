@@ -1,36 +1,38 @@
-
-
 import Image from "next/image";
 import Link from "next/link";
 import { getActivities } from "@/lib/api";
 import type { Activity } from "@/types";
 
+const ORDER = [10, 11, 12, 13];
+
 export default async function ActivityTypes() {
   const activities: Activity[] = await getActivities();
 
+  const byId = Object.fromEntries(activities.map((a) => [a.id, a]));
+
+  const sorted = ORDER.map((id) => byId[id]).filter(Boolean);
+
   return (
-    <section className="px-6 py-10 bg-white">
-      <h2 className="text-2xl font-bold text-(--brand-dark) mb-6">
-        Vores holdtyper
-      </h2>
-      <div className="space-y-8">
-        {activities.map((activity) => (
-          <Link key={activity.id} href={`/aktiviteter/${activity.id}`} className="block">
-            <h3 className="text-xl font-bold text-(--brand-dark) mb-3">
+    <section className="content-wrapper pt-3.5rem py-10">
+      <h2 className="text-2xl font-bold text-white mb-8">Vores holdtyper</h2>
+      <div className="space-y-2.5625rem">
+        {sorted.map((activity) => (
+          <Link key={activity.id} href={`/aktiviteter/${activity.id}`} className="block group">
+            <h3 className="text-lg font-semibold text-white mb-2">
               {activity.name}
             </h3>
             {activity.asset?.url && (
-              <div className="relative h-48 rounded-xl overflow-hidden mb-3">
+              <div className="relative h-48 overflow-hidden mb-3">
                 <Image
                   src={activity.asset.url}
                   alt={activity.name}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                   sizes="430px"
                 />
               </div>
             )}
-            <p className="text-(--grey-dark) text-sm leading-relaxed">
+            <p className="text-white/65 text-sm leading-relaxed">
               {activity.description}
             </p>
           </Link>

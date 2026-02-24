@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useState } from "react";
@@ -46,17 +44,17 @@ export default function ContactForm() {
 
   if (success) {
     return (
-      <section className="px-6 py-10 bg-white">
-        <h2 className="font-display text-2xl font-bold text-(--brand-dark) mb-2">Kontakt os</h2>
+      <section className="content-wrapper--narrow py-10">
+        <h2 className="text-2xl font-bold text-white mb-2">Kontakt os</h2>
         <p className="text-green-600 font-medium text-sm">✓ Tak for din besked! Vi vender tilbage snart.</p>
       </section>
     );
   }
 
   return (
-    <section className="px-6 py-10 bg-white">
-      <h2 className="font-display text-2xl font-bold text-(--brand-dark) mb-6">Kontakt os</h2>
-      <form onSubmit={handleSubmit} noValidate className="space-y-3">
+    <section className="content-wrapper--narrow py-10">
+      <h2 className="text-white text-2xl mb-6">Kontakt os</h2>
+      <form onSubmit={handleSubmit} noValidate className="space-y-[0.375rem]">
         <div>
           <input className="form-input" placeholder="Navn" value={form.name} onChange={set("name")} />
           <FormError message={errors.name} />
@@ -76,7 +74,12 @@ export default function ContactForm() {
           <FormError message={errors.message} />
         </div>
         <FormError message={errors.general} />
-        <button type="submit" disabled={loading} className="btn-primary">
+        <button
+          type="submit"
+          disabled={loading}
+          className="btn-primary mt-2"
+          style={{ width: "15rem", height: "3.3125rem" }}
+        >
           {loading ? "Sender…" : "Send besked"}
         </button>
       </form>
