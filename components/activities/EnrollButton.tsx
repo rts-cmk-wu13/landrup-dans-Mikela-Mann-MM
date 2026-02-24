@@ -20,15 +20,16 @@ export default function EnrollButton({ activityId, initialEnrolled, onEnroll, on
     };
 
     return (
-        <div>
+        <div className="flex flex-col items-center">
             <button
                 onClick={handleClick}
                 disabled={loading}
                 className={`
-    bg-brand-dark text-white font-medium text-md font-sans
-    px-14 py-3.5 rounded-lg border-none transition-opacity
-    ${loading ? "opacity-70 cursor-not-allowed" : "cursor-pointer"}
-  `}
+                    w-[70%] py-4 rounded-xl
+                    bg-(--brand-mid) text-white font-medium text-base
+                    border-none transition-opacity
+                    ${loading ? "opacity-70 cursor-not-allowed" : "cursor-pointer hover:opacity-90"}
+                `}
             >
                 {loading ? "Vent…" : enrolled ? "Forlad hold" : "Tilmeld"}
             </button>

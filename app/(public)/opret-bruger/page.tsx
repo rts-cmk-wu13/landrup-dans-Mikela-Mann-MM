@@ -76,8 +76,8 @@ export default function RegisterPage() {
 
   const set =
     (k: keyof typeof form) =>
-    (e: React.ChangeEvent<HTMLInputElement>) =>
-      setForm((f) => ({ ...f, [k]: e.target.value }));
+      (e: React.ChangeEvent<HTMLInputElement>) =>
+        setForm((f) => ({ ...f, [k]: e.target.value }));
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-6 py-10 bg-(--brand-dark)">
@@ -103,11 +103,11 @@ export default function RegisterPage() {
 
       {/* ── Form content – 354px wide ── */}
       <div className="w-full max-w-88.5">
-        <h2 className="font-display text-2xl font-medium text-white mb-6">
+        <h2 className="font-display text-2xl font-medium text-white mb-6 pt-8 pb-6">
           Opret bruger
         </h2>
 
-        <form onSubmit={handleSubmit} noValidate className="space-y-3">
+        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-2">
           <div>
             <input className="form-input" placeholder="Fornavn" value={form.firstname} onChange={set("firstname")} autoComplete="given-name" />
             <FormError message={errors.firstname} />
@@ -135,9 +135,11 @@ export default function RegisterPage() {
 
           <FormError message={errors.general} />
 
-          <button type="submit" disabled={loading} className="btn-primary mt-2">
-            {loading ? "Opretter…" : "Opret bruger"}
-          </button>
+          <div className="flex justify-center pb-4 pt-4">
+            <button type="submit" disabled={loading} className="btn-primary mt-2 w-60!">
+              {loading ? "Opretter…" : "Opret bruger"}
+            </button>
+          </div>
         </form>
 
         <p className="text-center text-(--grey-mid) text-sm mt-6">

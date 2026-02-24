@@ -41,8 +41,9 @@ export default async function ActivityDetailPage({ params }: ActivityDetailPageP
 
         <BackButton />
 
+        {/* Knap overlapper bunden af billedet */}
         {session?.role === "default" && (
-          <div className="absolute bottom-0 left-0 right-0 flex justify-center pb-5">
+          <div className="absolute bottom-0 left-0 right-0 translate-y-1/2 z-10">
             <EnrollButton
               activityId={activity.id}
               initialEnrolled={isEnrolled}
@@ -54,7 +55,9 @@ export default async function ActivityDetailPage({ params }: ActivityDetailPageP
       </div>
 
       {/* ── Text content ── */}
-      <div className=" px-5 pt-5 pb-8 ">
+      <div className="px-5 pb-8"
+        style={{ paddingTop: session?.role === "default" ? "2.5rem" : "1.25rem" }}
+      >
         <h1 className="text-xl font-medium text-white mb-1">
           {activity.name}
         </h1>

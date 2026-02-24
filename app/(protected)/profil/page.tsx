@@ -45,7 +45,7 @@ export default async function ProfilePage() {
       <div className="bg-(--brand-dark) px-4 py-6 min-h-screen">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-white font-bold">
-            {isInstructor ? "Mine hold" : "Mine aktiviteter"}
+            {isInstructor ? "Mine hold" : "Tilmeldte hold"}
           </h2>
           {isInstructor && (
             <Link

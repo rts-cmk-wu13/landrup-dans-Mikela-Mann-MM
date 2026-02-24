@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { loginAction, type LoginState } from "./actions";
 import FormError from "@/components/ui/FormError";
+import loading from "@/app/(protected)/aktiviteter/[id]/loading";
 
 const initialState: LoginState = {
   values: { username: "", password: "" },
@@ -41,7 +42,7 @@ export default function LoginPage() {
 
       {/* ── Form content – 354px wide ── */}
       <div className="w-full max-w-88.5">
-        <h2 className="text-[1.75rem] font-normal text-white mb-5 --font-body">
+        <h2 className="text-[1.75rem] font-normal text-white mb-5 --font-body pt-8 pb-6">
           Log ind
         </h2>
 
@@ -76,12 +77,15 @@ export default function LoginPage() {
           </button>
         </form>
 
+        
+
         <p className="text-center text-(--grey-mid) text-sm mt-6 --font-body">
           Er du endnu ikke bruger?{" "}
           <Link href="/opret-bruger" className="text-white underline">
             Opret dig her.
           </Link>
         </p>
+
 
         <label className="flex items-center justify-center gap-2 mt-5 text-(--grey-mid) text-[0.8rem] cursor-pointer --font-body">
           <input type="checkbox" name="rememberMe" />
