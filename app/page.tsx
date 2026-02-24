@@ -1,4 +1,5 @@
 
+
 import { getTestimonials } from "@/lib/api";
 import Hero from "../components/landing/Hero";
 import ActivityTypes from "../components/landing/ActivityTypes";

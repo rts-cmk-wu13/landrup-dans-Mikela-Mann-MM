@@ -1,3 +1,5 @@
+
+
 "use client";
 
 import { useState } from "react";
@@ -65,7 +67,7 @@ export default function NewsletterForm() {
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary !w-auto px-5 shrink-0"
+            className="btn-primary w-auto! px-5 shrink-0"
           >
             {loading ? "…" : "Tilmeld"}
           </button>

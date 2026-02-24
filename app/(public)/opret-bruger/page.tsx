@@ -1,3 +1,5 @@
+
+
 "use client";
 
 import { useState } from "react";
@@ -82,28 +84,33 @@ export default function RegisterPage() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-6 py-10 bg-(--brand-dark)">
 
-      {/* ── Logo ── */}
-      <div className="w-full mb-10">
-        <Image
-          src="/logo/LD-logo.png"
-          alt="LD logo"
-          width={64}
-          height={64}
-          className="mx-auto mb-4"
-        />
-        <Image
-          src="/logo/logo.png"
-          alt="Landrup Dans"
-          width={290}
-          height={62}
-          className="ml-auto"
-        />
-        <div className="border-b-2 border-white mt-2.5" />
+      {/* Logo */}
+      <div className="absolute top-6 w-full px-6">
+        {/* Ikon centreret */}
+        <div className="flex justify-center mb-4 pb-8 pt-8">
+          <Image
+            src="/logo/LD-logo.png"
+            alt="LD logo"
+            width={64}
+            height={64}
+          />
+        </div>
+        {/* Tekst-logo til højre */}
+        <div className="w-full text-right">
+          <Image
+            src="/logo/logo.png"
+            alt="Landrup Dans"
+            width={290}
+            height={62}
+            className="inline-block"
+          />
+        </div>
+        <div className="border-b-2 border-white mt-2.5 -mx-6" />
       </div>
 
       {/* ── Form content – 354px wide ── */}
       <div className="w-full max-w-88.5">
-        <h2 className="font-display text-2xl font-medium text-white mb-6 pt-8 pb-6">
+        <h2 className="font-display text-2xl font-medium text-white mb-6 pt-42 pb-6">
           Opret bruger
         </h2>
 

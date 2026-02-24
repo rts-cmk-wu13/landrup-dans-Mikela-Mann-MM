@@ -33,12 +33,12 @@ export default function EditActivityPage() {
     getActivity(Number(id))
       .then((a) => {
         setDefaults({
-          name:            a.name ?? "",
-          description:     a.description ?? "",
-          weekday:         a.weekday ?? "",
-          time:            a.time ?? "",
-          minAge:          String(a.minAge ?? ""),
-          maxAge:          String(a.maxAge ?? ""),
+          name: a.name ?? "",
+          description: a.description ?? "",
+          weekday: a.weekday ?? "",
+          time: a.time ?? "",
+          minAge: String(a.minAge ?? ""),
+          maxAge: String(a.maxAge ?? ""),
           maxParticipants: String(a.maxParticipants ?? ""),
         });
       })

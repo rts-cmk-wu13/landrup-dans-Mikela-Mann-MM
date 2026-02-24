@@ -187,7 +187,7 @@ API URL og cookie-navn opbevares i `.env.local` og er tilgængelige via `process
 # Perspektivering
 
 **Deployment:**  
-Projektet er deployet på Vercel, som er den anbefalede hosting-platform for Next.js. Vercel håndterer automatisk server-side rendering og CDN-distribution globalt. Deployment sker automatisk ved push til main-branchen via GitHub-integration.
+Projektet skal deployes på Vercel, som er den anbefalede hosting-platform for Next.js. Vercel håndterer automatisk server-side rendering og CDN-distribution globalt. Deployment sker automatisk ved push til main-branchen via GitHub-integration.
 
 **Sentry fejlmonitorering:**  
 Projektet er sat op med Sentry til fejlmonitorering i production. Fejl rapporteres automatisk via `lib/reportError.ts`, som wrapper Sentrys SDK. `global-error.tsx` fanger ubehandlede fejl på applikationsniveau. Dette giver overblik over fejl i production uden at brugeren behøver at rapportere dem manuelt.

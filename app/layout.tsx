@@ -1,3 +1,5 @@
+
+
 import type { Metadata } from "next";
 import { Ubuntu } from "next/font/google"
 import "./globals.css";
